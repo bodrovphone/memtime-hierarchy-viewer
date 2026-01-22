@@ -65,6 +65,7 @@ function TimeEntriesPage() {
   }
 
   return (
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
     <div className="mx-auto max-w-6xl px-4 py-8">
       {/* Header */}
       <div className="mb-8 flex items-center justify-between">
@@ -202,6 +203,7 @@ function TimeEntriesPage() {
           </>
         )}
       </div>
+    </div>
     </div>
   )
 }

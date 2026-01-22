@@ -37,14 +37,18 @@ File-based routing using TanStack Router. Each file in `routes/` maps to a URL p
 - Shows duration, formatted dates, edit links
 - Uses `getTimeEntries` server function
 
-### `time-entries/new.tsx` (pending)
+### `time-entries/new.tsx`
 - Form to create new time entry
-- Task dropdown, datetime pickers, comment field
+- Loads all tasks via `getAllTasks` for dropdown
+- Task dropdown shows full path (Client → Project → Task)
+- Redirects to list on success
 
-### `time-entries/$id.tsx` (pending)
+### `time-entries/$id.tsx`
 - Form to edit existing time entry
-- Pre-fills with current values
-- Uses `getTimeEntry`, `updateTimeEntry` server functions
+- Pre-fills with current values from `getTimeEntry`
+- Parallel loading of tasks and entry data
+- 404 handling for invalid IDs
+- Uses `updateTimeEntry` server function
 
 ## Patterns
 

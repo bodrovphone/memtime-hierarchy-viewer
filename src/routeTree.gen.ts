@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as HierarchyRouteImport } from './routes/hierarchy'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TimeEntriesIndexRouteImport } from './routes/time-entries/index'
+import { Route as TimeEntriesNewRouteImport } from './routes/time-entries/new'
+import { Route as TimeEntriesIdRouteImport } from './routes/time-entries/$id'
 
 const HierarchyRoute = HierarchyRouteImport.update({
   id: '/hierarchy',
@@ -28,34 +30,68 @@ const TimeEntriesIndexRoute = TimeEntriesIndexRouteImport.update({
   path: '/time-entries/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TimeEntriesNewRoute = TimeEntriesNewRouteImport.update({
+  id: '/time-entries/new',
+  path: '/time-entries/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TimeEntriesIdRoute = TimeEntriesIdRouteImport.update({
+  id: '/time-entries/$id',
+  path: '/time-entries/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/hierarchy': typeof HierarchyRoute
+  '/time-entries/$id': typeof TimeEntriesIdRoute
+  '/time-entries/new': typeof TimeEntriesNewRoute
   '/time-entries/': typeof TimeEntriesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/hierarchy': typeof HierarchyRoute
+  '/time-entries/$id': typeof TimeEntriesIdRoute
+  '/time-entries/new': typeof TimeEntriesNewRoute
   '/time-entries': typeof TimeEntriesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/hierarchy': typeof HierarchyRoute
+  '/time-entries/$id': typeof TimeEntriesIdRoute
+  '/time-entries/new': typeof TimeEntriesNewRoute
   '/time-entries/': typeof TimeEntriesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/hierarchy' | '/time-entries/'
+  fullPaths:
+    | '/'
+    | '/hierarchy'
+    | '/time-entries/$id'
+    | '/time-entries/new'
+    | '/time-entries/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/hierarchy' | '/time-entries'
-  id: '__root__' | '/' | '/hierarchy' | '/time-entries/'
+  to:
+    | '/'
+    | '/hierarchy'
+    | '/time-entries/$id'
+    | '/time-entries/new'
+    | '/time-entries'
+  id:
+    | '__root__'
+    | '/'
+    | '/hierarchy'
+    | '/time-entries/$id'
+    | '/time-entries/new'
+    | '/time-entries/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   HierarchyRoute: typeof HierarchyRoute
+  TimeEntriesIdRoute: typeof TimeEntriesIdRoute
+  TimeEntriesNewRoute: typeof TimeEntriesNewRoute
   TimeEntriesIndexRoute: typeof TimeEntriesIndexRoute
 }
 
@@ -82,12 +118,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TimeEntriesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/time-entries/new': {
+      id: '/time-entries/new'
+      path: '/time-entries/new'
+      fullPath: '/time-entries/new'
+      preLoaderRoute: typeof TimeEntriesNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/time-entries/$id': {
+      id: '/time-entries/$id'
+      path: '/time-entries/$id'
+      fullPath: '/time-entries/$id'
+      preLoaderRoute: typeof TimeEntriesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   HierarchyRoute: HierarchyRoute,
+  TimeEntriesIdRoute: TimeEntriesIdRoute,
+  TimeEntriesNewRoute: TimeEntriesNewRoute,
   TimeEntriesIndexRoute: TimeEntriesIndexRoute,
 }
 export const routeTree = rootRouteImport

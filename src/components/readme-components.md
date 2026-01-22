@@ -96,21 +96,35 @@ Reusable pagination component for tables and lists.
 
 ---
 
-## `TimeEntryForm.tsx` (pending)
+## `TimeEntryForm.tsx`
 
 Shared form component for creating and editing time entries.
 
-**Planned Props:**
+**Props:**
 | Prop | Type | Description |
 |------|------|-------------|
 | `mode` | `'create' \| 'edit'` | Form mode |
 | `initialData` | `TimeEntry` | Pre-fill values (edit mode) |
+| `tasks` | `Array<Task & {...}>` | Available tasks with context |
 | `onSubmit` | `(data) => Promise<void>` | Form submission handler |
 
-**Planned Features:**
-- Task dropdown (fetched from API)
-- DateTime pickers for start/end
+**Features:**
+- Task dropdown showing Client → Project → Task path
+- DateTime pickers for start/end (datetime-local inputs)
 - Comment textarea
-- Validation (end > start)
+- Real-time duration preview
+- Validation (required fields, end > start)
 - Loading state during submit
-- Error display
+- Error display with dismiss
+- Cancel button returns to list
+
+**Usage:**
+```tsx
+<TimeEntryForm
+  mode="create"
+  tasks={tasks}
+  onSubmit={async (data) => {
+    await createTimeEntry({ data })
+  }}
+/>
+```

@@ -147,9 +147,9 @@ export function TreeNode({
         {/* Name */}
         <span className="flex-1 text-gray-100 font-medium truncate">{name}</span>
 
-        {/* Type Badge */}
+        {/* Type Badge with ID for tasks */}
         <span className="text-xs text-gray-500 px-2 py-0.5 bg-gray-800 rounded">
-          {getNodeLabel(type)}
+          {getNodeLabel(type)}{type === 'task' && ` #${id}`}
         </span>
 
         {/* Count Badge (if has children) */}
