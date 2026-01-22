@@ -18,11 +18,11 @@ Build a time-tracking application with three main features using the Memtime API
 | Phase | Status | Notes |
 |-------|--------|-------|
 | 1. Setup | ✅ Complete | Types, API client, environment |
-| 2. Task 1: Hierarchy | 🔄 In Progress | Components created, debugging API response format |
-| 3. Task 2: Time Entries | ⬜ Not Started | |
+| 2. Task 1: Hierarchy | ✅ Complete | Tree view with lazy loading, expand/collapse, pagination |
+| 3. Task 2: Time Entries | ✅ Complete | Paginated table with duration display |
 | 4. Task 3: Forms | ⬜ Not Started | |
 | 5. Polish | ⬜ Not Started | |
-| 6. Cleanup | ⬜ Not Started | |
+| 6. Cleanup | ✅ Complete | Demo files deleted, home page updated |
 
 ---
 
