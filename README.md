@@ -1,5 +1,7 @@
 # Memtime Hierarchy Viewer
 
+**Live Demo:** https://euphonious-dolphin-7d500c.netlify.app/
+
 A time-tracking application built with TanStack Start that integrates with the Memtime API.
 
 ## Features
@@ -11,6 +13,7 @@ A time-tracking application built with TanStack Start that integrates with the M
 ## Tech Stack
 
 - **Framework:** TanStack Start (React 19, TanStack Router)
+- **Data fetching:** TanStack Query v5 (React Query)
 - **Styling:** Tailwind CSS v4
 - **Build:** Vite 7
 - **Language:** TypeScript
@@ -95,6 +98,16 @@ npm run test:coverage  # Run tests with coverage report
 **Target:** 50%+ statement coverage ✓
 
 ## Architecture & Data Flow
+
+### TanStack Query integration
+
+- A single `QueryClient` is created per request in `src/lib/query-client.ts` and provided via `QueryClientProvider` in the root route (`src/routes/__root.tsx`).
+- All Memtime API access is encapsulated in server functions (`src/api/memtime.ts`) created with `createServerFn`, which handle authentication and error mapping.
+- UI components and routes consume these server functions exclusively through typed React Query hooks in `src/hooks/use-memtime-queries.ts`:
+  - `useClients`, `useProjects`, `useTasks`, `useAllTasks`
+  - `useTimeEntries`, `useTimeEntry`, `useCreateTimeEntry`, `useUpdateTimeEntry`
+- Query keys are centralized in `queryKeys` (also in `src/lib/query-client.ts`) for consistent cache invalidation and pagination.
+- Default caching is tuned for the Memtime API rate limits: 5 min `staleTime`, 30 min `gcTime`, 1 retry, and `refetchOnWindowFocus: false`.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐

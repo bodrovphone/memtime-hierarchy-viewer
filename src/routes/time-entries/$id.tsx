@@ -1,21 +1,18 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { Loader2, AlertCircle, Edit } from 'lucide-react'
 import { TimeEntryForm } from '@/components/TimeEntryForm'
-import { getTimeEntry, updateTimeEntry } from '@/api/memtime'
+import { useTimeEntry, useUpdateTimeEntry } from '@/hooks/use-memtime-queries'
 
 export const Route = createFileRoute('/time-entries/$id')({
-  loader: async ({ params }) => {
-    const timeEntry = await getTimeEntry({ data: { id: params.id } })
-    return { timeEntry }
-  },
   pendingComponent: LoadingState,
-  errorComponent: ErrorState,
   component: EditTimeEntryPage,
 })
 
 function EditTimeEntryPage() {
-  const { timeEntry } = Route.useLoaderData()
   const { id } = Route.useParams()
+  const { data: timeEntry, isLoading, error } = useTimeEntry(id)
+
+  const updateMutation = useUpdateTimeEntry()
 
   const handleSubmit = async (data: {
     taskId: number
@@ -23,7 +20,16 @@ function EditTimeEntryPage() {
     start: string
     end: string
   }) => {
-    return await updateTimeEntry({ data: { id, ...data } })
+    const result = await updateMutation.mutateAsync({ id, ...data })
+    return result
+  }
+
+  if (isLoading) {
+    return <LoadingState />
+  }
+
+  if (error instanceof Error) {
+    return <ErrorState error={error} />
   }
 
   return (

@@ -1,12 +1,15 @@
 import { useState, useCallback } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
+import { useQueryClient } from '@tanstack/react-query'
 import { Loader2, RefreshCw, AlertCircle } from 'lucide-react'
 
 import { TreeNode, TreeNodeSkeleton } from '@/components/TreeNode'
 import { Toast } from '@/components/Toast'
-import { getClients, getProjects, getTasks } from '@/api/memtime'
+import { useClients, useProjects, useTasks } from '@/hooks/use-memtime-queries'
+import { getProjects, getTasks } from '@/api/memtime'
 import { copyToClipboard } from '@/utils/clipboard'
 import { DEFAULT_PAGE_SIZE } from '@/constants/pagination'
+import { queryKeys } from '@/lib/query-client'
 import type { Client, Project, Task, TreeNodeType } from '@/types/memtime'
 import type { HierarchyState } from '@/types/hierarchy'
 
@@ -16,12 +19,6 @@ import type { HierarchyState } from '@/types/hierarchy'
 
 export const Route = createFileRoute('/hierarchy')({
   component: HierarchyPage,
-  loader: async () => {
-    const response = await getClients({
-      data: { limit: DEFAULT_PAGE_SIZE, offset: 0 },
-    })
-    return response
-  },
   pendingComponent: LoadingState,
   errorComponent: ErrorState,
 })
@@ -31,25 +28,53 @@ export const Route = createFileRoute('/hierarchy')({
 // =============================================================================
 
 function HierarchyPage() {
-  const initialClients = Route.useLoaderData()
+  const queryClient = useQueryClient()
 
-  const [state, setState] = useState<HierarchyState>(() => {
-    const data = initialClients?.data ?? []
-    const total = initialClients?.total ?? 0
-    return {
-      clients: {
-        items: data,
-        total: total,
-        loaded: data.length,
-        hasMore: data.length < total,
-      },
-      projects: {},
-      tasks: {},
-    }
+  // Fetch initial clients with React Query (cached!)
+  const {
+    data: clientsData,
+    isLoading: isLoadingClients,
+    error: clientsError,
+    refetch: refetchClients,
+  } = useClients({ limit: DEFAULT_PAGE_SIZE, offset: 0 })
+
+  // Local state for expanded tree data (beyond initial load)
+  const [state, setState] = useState<HierarchyState>({
+    clients: { items: [], total: 0, loaded: 0, hasMore: false },
+    projects: {},
+    tasks: {},
   })
+
+  // Sync clients data from React Query to local state
+  const clients = clientsData?.data ?? []
+  const clientsTotal = clientsData?.total ?? 0
+  const clientsHasMore = clients.length < clientsTotal
 
   const [error, setError] = useState<string | null>(null)
   const [toast, setToast] = useState<string | null>(null)
+  const [isRefreshing, setIsRefreshing] = useState(false)
+
+  // ---------------------------------------------------------------------------
+  // Refresh - Invalidate cache and refetch
+  // ---------------------------------------------------------------------------
+  const handleRefresh = async () => {
+    setIsRefreshing(true)
+    try {
+      // Invalidate all hierarchy-related queries
+      await queryClient.invalidateQueries({ queryKey: queryKeys.clients.all })
+      await queryClient.invalidateQueries({ queryKey: queryKeys.projects.all })
+      await queryClient.invalidateQueries({ queryKey: queryKeys.tasks.all })
+      // Reset local state
+      setState({
+        clients: { items: [], total: 0, loaded: 0, hasMore: false },
+        projects: {},
+        tasks: {},
+      })
+      await refetchClients()
+    } finally {
+      setIsRefreshing(false)
+    }
+  }
 
   // ---------------------------------------------------------------------------
   // Handle Task Click - Copy ID to Clipboard
@@ -64,60 +89,124 @@ function HierarchyPage() {
   }, [])
 
   // ---------------------------------------------------------------------------
-  // Load Projects for a Client
+  // Load Projects for a Client (with caching)
   // ---------------------------------------------------------------------------
-  const loadProjects = useCallback(async (clientId: string | number) => {
-    try {
-      setError(null)
-      const response = await getProjects({
-        data: { clientId, limit: DEFAULT_PAGE_SIZE, offset: 0 },
-      })
+  const loadProjects = useCallback(
+    async (clientId: string | number) => {
+      try {
+        setError(null)
 
-      setState((prev) => ({
-        ...prev,
-        projects: {
-          ...prev.projects,
-          [clientId]: {
-            items: response.data,
-            total: response.total,
-            loaded: response.data.length,
-            hasMore: response.data.length < response.total,
+        // Check cache first
+        const cached = queryClient.getQueryData(
+          queryKeys.projects.list(clientId, { limit: DEFAULT_PAGE_SIZE, offset: 0 }),
+        )
+
+        if (cached) {
+          const response = cached as { data: Project[]; total: number }
+          setState((prev) => ({
+            ...prev,
+            projects: {
+              ...prev.projects,
+              [clientId]: {
+                items: response.data,
+                total: response.total,
+                loaded: response.data.length,
+                hasMore: response.data.length < response.total,
+              },
+            },
+          }))
+          return
+        }
+
+        // Fetch and cache
+        const response = await queryClient.fetchQuery({
+          queryKey: queryKeys.projects.list(clientId, {
+            limit: DEFAULT_PAGE_SIZE,
+            offset: 0,
+          }),
+          queryFn: () =>
+            getProjects({ data: { clientId, limit: DEFAULT_PAGE_SIZE, offset: 0 } }),
+        })
+
+        setState((prev) => ({
+          ...prev,
+          projects: {
+            ...prev.projects,
+            [clientId]: {
+              items: response.data,
+              total: response.total,
+              loaded: response.data.length,
+              hasMore: response.data.length < response.total,
+            },
           },
-        },
-      }))
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load projects')
-      throw err
-    }
-  }, [])
+        }))
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load projects')
+        throw err
+      }
+    },
+    [queryClient],
+  )
 
   // ---------------------------------------------------------------------------
-  // Load Tasks for a Project
+  // Load Tasks for a Project (with caching)
   // ---------------------------------------------------------------------------
-  const loadTasks = useCallback(async (projectId: string | number) => {
-    try {
-      setError(null)
-      const response = await getTasks({
-        data: { projectId, limit: DEFAULT_PAGE_SIZE, offset: 0 },
-      })
+  const loadTasks = useCallback(
+    async (projectId: string | number) => {
+      try {
+        setError(null)
 
-      setState((prev) => ({
-        ...prev,
-        tasks: {
-          ...prev.tasks,
-          [projectId]: {
-            items: response.data,
-            total: response.total,
-            loaded: response.data.length,
-            hasMore: response.data.length < response.total,
+        // Check cache first
+        const cached = queryClient.getQueryData(
+          queryKeys.tasks.list(projectId, { limit: DEFAULT_PAGE_SIZE, offset: 0 }),
+        )
+
+        if (cached) {
+          const response = cached as { data: Task[]; total: number }
+          setState((prev) => ({
+            ...prev,
+            tasks: {
+              ...prev.tasks,
+              [projectId]: {
+                items: response.data,
+                total: response.total,
+                loaded: response.data.length,
+                hasMore: response.data.length < response.total,
+              },
+            },
+          }))
+          return
+        }
+
+        // Fetch and cache
+        const response = await queryClient.fetchQuery({
+          queryKey: queryKeys.tasks.list(projectId, {
+            limit: DEFAULT_PAGE_SIZE,
+            offset: 0,
+          }),
+          queryFn: () =>
+            getTasks({ data: { projectId, limit: DEFAULT_PAGE_SIZE, offset: 0 } }),
+        })
+
+        setState((prev) => ({
+          ...prev,
+          tasks: {
+            ...prev.tasks,
+            [projectId]: {
+              items: response.data,
+              total: response.total,
+              loaded: response.data.length,
+              hasMore: response.data.length < response.total,
+            },
           },
-        },
-      }))
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load tasks')
-      throw err
-    }
-  }, [])
+        }))
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load tasks')
+        throw err
+      }
+    },
+    [queryClient],
+  )
 
   // ---------------------------------------------------------------------------
   // Handle Expand
@@ -143,32 +232,40 @@ function HierarchyPage() {
 
         if (type === 'client') {
           // Load more clients
-          const currentOffset = state.clients.loaded
-          const response = await getClients({
-            data: { limit: DEFAULT_PAGE_SIZE, offset: currentOffset },
+          const currentOffset = state.clients.loaded || clients.length
+          const response = await queryClient.fetchQuery({
+            queryKey: queryKeys.clients.list({
+              limit: DEFAULT_PAGE_SIZE,
+              offset: currentOffset,
+            }),
+            queryFn: () =>
+              import('@/api/memtime').then((m) =>
+                m.getClients({ data: { limit: DEFAULT_PAGE_SIZE, offset: currentOffset } }),
+              ),
           })
 
           setState((prev) => ({
             ...prev,
             clients: {
-              ...prev.clients,
-              items: [...prev.clients.items, ...response.data],
-              loaded: prev.clients.loaded + response.data.length,
-              hasMore:
-                prev.clients.loaded + response.data.length < response.total,
+              items: response.data,
+              total: response.total,
+              loaded: currentOffset + response.data.length,
+              hasMore: currentOffset + response.data.length < response.total,
             },
           }))
         } else if (type === 'project') {
-          // Load more projects for this client (id is clientId)
           const projectState = state.projects[id]
           if (!projectState) return
 
-          const response = await getProjects({
-            data: {
-              clientId: id,
+          const response = await queryClient.fetchQuery({
+            queryKey: queryKeys.projects.list(id, {
               limit: DEFAULT_PAGE_SIZE,
               offset: projectState.loaded,
-            },
+            }),
+            queryFn: () =>
+              getProjects({
+                data: { clientId: id, limit: DEFAULT_PAGE_SIZE, offset: projectState.loaded },
+              }),
           })
 
           setState((prev) => ({
@@ -180,22 +277,23 @@ function HierarchyPage() {
                 items: [...prev.projects[id].items, ...response.data],
                 loaded: prev.projects[id].loaded + response.data.length,
                 hasMore:
-                  prev.projects[id].loaded + response.data.length <
-                  response.total,
+                  prev.projects[id].loaded + response.data.length < response.total,
               },
             },
           }))
         } else if (type === 'task') {
-          // Load more tasks for this project (id is projectId)
           const taskState = state.tasks[id]
           if (!taskState) return
 
-          const response = await getTasks({
-            data: {
-              projectId: id,
+          const response = await queryClient.fetchQuery({
+            queryKey: queryKeys.tasks.list(id, {
               limit: DEFAULT_PAGE_SIZE,
               offset: taskState.loaded,
-            },
+            }),
+            queryFn: () =>
+              getTasks({
+                data: { projectId: id, limit: DEFAULT_PAGE_SIZE, offset: taskState.loaded },
+              }),
           })
 
           setState((prev) => ({
@@ -213,13 +311,33 @@ function HierarchyPage() {
           }))
         }
       } catch (err) {
-        setError(
-          err instanceof Error ? err.message : 'Failed to load more items',
-        )
+        setError(err instanceof Error ? err.message : 'Failed to load more items')
       }
     },
-    [state],
+    [state, clients.length, queryClient],
   )
+
+  // Combine initial clients with any additional loaded clients
+  const allClients = state.clients.items.length > 0
+    ? [...clients, ...state.clients.items]
+    : clients
+
+  const totalClients = state.clients.total || clientsTotal
+  const hasMoreClients = state.clients.hasMore || clientsHasMore
+
+  // ---------------------------------------------------------------------------
+  // Loading State
+  // ---------------------------------------------------------------------------
+  if (isLoadingClients) {
+    return <LoadingState />
+  }
+
+  // ---------------------------------------------------------------------------
+  // Error State
+  // ---------------------------------------------------------------------------
+  if (clientsError) {
+    return <ErrorState error={clientsError} />
+  }
 
   // ---------------------------------------------------------------------------
   // Render
@@ -256,28 +374,27 @@ function HierarchyPage() {
           {/* Tree Header */}
           <div className="px-4 py-3 border-b border-gray-700 flex items-center justify-between">
             <span className="text-sm text-gray-400">
-              {state.clients.total} client{state.clients.total !== 1 ? 's' : ''}{' '}
-              total
+              {totalClients} client{totalClients !== 1 ? 's' : ''} total
+              <span className="ml-2 text-xs text-blue-400">(cached 5 min)</span>
             </span>
             <button
-              onClick={() => window.location.reload()}
-              className="text-sm text-gray-400 hover:text-white flex items-center gap-1 transition-colors"
+              onClick={handleRefresh}
+              disabled={isRefreshing}
+              className="text-sm text-gray-400 hover:text-white flex items-center gap-1 transition-colors disabled:opacity-50"
             >
-              <RefreshCw size={14} />
-              Refresh
+              <RefreshCw size={14} className={isRefreshing ? 'animate-spin' : ''} />
+              {isRefreshing ? 'Refreshing...' : 'Refresh'}
             </button>
           </div>
 
           {/* Tree Content */}
           <div className="p-2">
-            {state.clients.items.length === 0 ? (
-              <div className="py-8 text-center text-gray-500">
-                No clients found
-              </div>
+            {allClients.length === 0 ? (
+              <div className="py-8 text-center text-gray-500">No clients found</div>
             ) : (
               <>
                 {/* Client Nodes */}
-                {(state.clients.items as Client[]).map((client) => (
+                {(allClients as Client[]).map((client) => (
                   <TreeNode
                     key={client.id}
                     id={client.id}
@@ -324,10 +441,10 @@ function HierarchyPage() {
                 ))}
 
                 {/* Load More Clients */}
-                {state.clients.hasMore && (
+                {hasMoreClients && (
                   <LoadMoreButton
-                    loaded={state.clients.loaded}
-                    total={state.clients.total}
+                    loaded={state.clients.loaded || clients.length}
+                    total={totalClients}
                     onLoadMore={() => handleLoadMore('', 'client')}
                   />
                 )}

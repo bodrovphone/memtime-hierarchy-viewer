@@ -9,8 +9,8 @@ import {
   CheckCircle,
   X,
 } from 'lucide-react'
-import { getTimeEntries } from '@/api/memtime'
 import { Pagination } from '@/components/Pagination'
+import { useTimeEntries } from '@/hooks/use-memtime-queries'
 import { formatDateTime } from '@/utils/date'
 import { DEFAULT_PAGE_SIZE } from '@/constants/pagination'
 import type { TimeEntry } from '@/types/memtime'
@@ -29,25 +29,22 @@ export const Route = createFileRoute('/time-entries/')({
       entryId: search?.entryId as string | undefined,
     }
   },
-  loaderDeps: ({ search: { page } }) => ({ page }),
-  loader: async ({ deps: { page } }) => {
-    const offset = ((page ?? 1) - 1) * DEFAULT_PAGE_SIZE
-    return getTimeEntries({ data: { limit: DEFAULT_PAGE_SIZE, offset } })
-  },
-  pendingComponent: LoadingState,
-  errorComponent: ErrorState,
   component: TimeEntriesPage,
 })
 
 function TimeEntriesPage() {
   const { page, success, entryId } = Route.useSearch()
   const navigate = useNavigate({ from: Route.fullPath })
-  const data = Route.useLoaderData()
+  const currentPage = page ?? 1
+  const offset = (currentPage - 1) * DEFAULT_PAGE_SIZE
+  const { data, isLoading, error } = useTimeEntries({
+    limit: DEFAULT_PAGE_SIZE,
+    offset,
+  })
   const [showSuccess, setShowSuccess] = useState(!!success)
 
   const entries = data?.data ?? []
   const total = data?.total ?? 0
-  const currentPage = page ?? 1
 
   // Auto-dismiss success message after 5 seconds
   useEffect(() => {

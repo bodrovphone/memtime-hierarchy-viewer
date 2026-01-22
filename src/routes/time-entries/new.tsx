@@ -1,20 +1,23 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Plus } from 'lucide-react'
 import { TimeEntryForm } from '@/components/TimeEntryForm'
-import { createTimeEntry } from '@/api/memtime'
+import { useCreateTimeEntry } from '@/hooks/use-memtime-queries'
 
 export const Route = createFileRoute('/time-entries/new')({
   component: NewTimeEntryPage,
 })
 
 function NewTimeEntryPage() {
+  const createMutation = useCreateTimeEntry()
+
   const handleSubmit = async (data: {
     taskId: number
     comment: string
     start: string
     end: string
   }) => {
-    return await createTimeEntry({ data })
+    const result = await createMutation.mutateAsync(data)
+    return result
   }
 
   return (
