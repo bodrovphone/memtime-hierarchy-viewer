@@ -30,9 +30,9 @@ Utilities for the hierarchy tree view component.
 
 Clipboard utilities with fallback support.
 
-| Function              | Description                                        |
-| --------------------- | -------------------------------------------------- |
-| `copyToClipboard(text)` | Copies text to clipboard (with legacy fallback)  |
+| Function                | Description                                     |
+| ----------------------- | ----------------------------------------------- |
+| `copyToClipboard(text)` | Copies text to clipboard (with legacy fallback) |
 
 ## Usage Examples
 

@@ -2,18 +2,51 @@
 
 Reusable React components for the Memtime Viewer application.
 
-## Components
+## Structure
 
-| Component       | File                | Description                        |
-| --------------- | ------------------- | ---------------------------------- |
-| `Header`        | `Header.tsx`        | App header with navigation         |
-| `TreeNode`      | `TreeNode.tsx`      | Expandable tree node for hierarchy |
-| `Pagination`    | `Pagination.tsx`    | Page navigation for lists          |
-| `TimeEntryForm` | `TimeEntryForm.tsx` | Create/edit form (pending)         |
+Each component is organized in its own folder with:
+
+- `ComponentName.tsx` - The component implementation
+- `ComponentName.test.tsx` - Unit tests
+- `index.ts` - Barrel file for exports
+
+```
+src/components/
+├── Header/
+├── Pagination/
+├── TimeEntryForm/
+├── Toast/
+├── TreeNode/
+├── index.ts          # Main barrel file
+└── readme-components.md
+```
+
+## Imports
+
+```tsx
+// Import from component folder
+import { Header } from '@/components/Header'
+import { TreeNode } from '@/components/TreeNode'
+
+// Or import from main barrel file
+import { Header, TreeNode, Pagination } from '@/components'
+```
 
 ---
 
-## `Header.tsx`
+## Components
+
+| Component       | Description                        |
+| --------------- | ---------------------------------- |
+| `Header`        | App header with navigation         |
+| `TreeNode`      | Expandable tree node for hierarchy |
+| `Pagination`    | Page navigation for lists          |
+| `TimeEntryForm` | Create/edit form for time entries  |
+| `Toast`         | Toast notification for feedback    |
+
+---
+
+## `Header`
 
 Global navigation header used in root layout.
 
@@ -24,13 +57,6 @@ Global navigation header used in root layout.
 - Active link highlighting
 - Memtime branding with clock icon
 
-**Usage:**
-
-```tsx
-// In __root.tsx
-<Header />
-```
-
 **Navigation Links:**
 
 - Home (`/`)
@@ -39,7 +65,7 @@ Global navigation header used in root layout.
 
 ---
 
-## `TreeNode.tsx`
+## `TreeNode`
 
 Expandable/collapsible node for displaying hierarchical data.
 
@@ -55,6 +81,7 @@ Expandable/collapsible node for displaying hierarchical data.
 | `loadedCount` | `number` | Loaded items (for display) |
 | `onExpand` | `(id, type) => Promise<void>` | Called when node expands |
 | `onLoadMore` | `(id) => Promise<void>` | Called for pagination |
+| `onTaskClick` | `(id) => void` | Called when task is clicked |
 | `children` | `ReactNode` | Nested TreeNode components |
 
 **Features:**
@@ -62,14 +89,15 @@ Expandable/collapsible node for displaying hierarchical data.
 - Lazy loading on expand
 - Loading spinner during fetch
 - Type-specific icons (Building2, FolderOpen, CheckSquare)
-- Type badges (Client, Project, Task)
+- Type badges with Task ID display
+- Click to copy task ID
 - Indentation based on depth
 
 **Also exports:** `TreeNodeSkeleton` for loading states.
 
 ---
 
-## `Pagination.tsx`
+## `Pagination`
 
 Reusable pagination component for tables and lists.
 
@@ -89,20 +117,9 @@ Reusable pagination component for tables and lists.
 - Responsive (simplified on mobile)
 - Disabled states at boundaries
 
-**Usage:**
-
-```tsx
-<Pagination
-  currentPage={1}
-  totalItems={100}
-  itemsPerPage={10}
-  onPageChange={(page) => navigate({ search: { page } })}
-/>
-```
-
 ---
 
-## `TimeEntryForm.tsx`
+## `TimeEntryForm`
 
 Shared form component for creating and editing time entries.
 
@@ -111,28 +128,35 @@ Shared form component for creating and editing time entries.
 |------|------|-------------|
 | `mode` | `'create' \| 'edit'` | Form mode |
 | `initialData` | `TimeEntry` | Pre-fill values (edit mode) |
-| `tasks` | `Array<Task & {...}>` | Available tasks with context |
-| `onSubmit` | `(data) => Promise<void>` | Form submission handler |
+| `onSubmit` | `(data) => Promise<TimeEntry>` | Form submission handler |
 
 **Features:**
 
-- Task dropdown showing Client → Project → Task path
-- DateTime pickers for start/end (datetime-local inputs)
+- Task ID input with link to hierarchy
+- DateTime pickers for start/end
 - Comment textarea
 - Real-time duration preview
 - Validation (required fields, end > start)
 - Loading state during submit
 - Error display with dismiss
-- Cancel button returns to list
+- Success redirect with toast
 
-**Usage:**
+---
 
-```tsx
-<TimeEntryForm
-  mode="create"
-  tasks={tasks}
-  onSubmit={async (data) => {
-    await createTimeEntry({ data })
-  }}
-/>
-```
+## `Toast`
+
+Toast notification component for user feedback.
+
+**Props:**
+| Prop | Type | Description |
+|------|------|-------------|
+| `message` | `string` | Message to display |
+| `duration` | `number` | Auto-dismiss time in ms (default: 3000) |
+| `onClose` | `() => void` | Called when toast closes |
+
+**Features:**
+
+- Auto-dismiss after duration
+- Manual close button
+- Fade in/out animation
+- Fixed position (bottom-right)
