@@ -10,6 +10,17 @@ A time-tracking application built with TanStack Start that integrates with the M
 - **Time Entries** (`/time-entries`) - Paginated table of time tracking records with duration display
 - **Create/Edit** (`/time-entries/new`, `/time-entries/:id`) - Forms for managing time entries
 
+## Screenshots
+
+### Home
+![Home](./docs/screenshots/home.png)
+
+### Hierarchy View
+![Hierarchy](./docs/screenshots/hierarchy.png)
+
+### Time Entries
+![Time Entries](./docs/screenshots/time-entries.png)
+
 ## Tech Stack
 
 - **Framework:** TanStack Start (React 19, TanStack Router)
