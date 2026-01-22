@@ -6,7 +6,7 @@ import { TreeNode, TreeNodeSkeleton } from '@/components/TreeNode'
 import { Toast } from '@/components/Toast'
 import { getClients, getProjects, getTasks } from '@/api/memtime'
 import { copyToClipboard } from '@/utils/clipboard'
-import { DEFAULT_DEFAULT_PAGE_SIZE } from '@/constants/pagination'
+import { DEFAULT_PAGE_SIZE } from '@/constants/pagination'
 import type { Client, Project, Task, TreeNodeType } from '@/types/memtime'
 import type { HierarchyState } from '@/types/hierarchy'
 

@@ -81,8 +81,8 @@ export function TreeNode({
         await onExpand(id, type)
         setHasLoaded(true)
         setIsExpanded(true)
-      } catch (error) {
-        console.error('Failed to expand node:', error)
+      } catch {
+        // Error is handled by parent component via onExpand rejection
       } finally {
         setIsLoading(false)
       }
@@ -95,8 +95,8 @@ export function TreeNode({
     setIsLoadingMore(true)
     try {
       await onLoadMore(id, type)
-    } catch (error) {
-      console.error('Failed to load more:', error)
+    } catch {
+      // Error is handled by parent component via onLoadMore rejection
     } finally {
       setIsLoadingMore(false)
     }
@@ -115,6 +115,7 @@ export function TreeNode({
         onClick={handleToggle}
         role="button"
         tabIndex={0}
+        aria-expanded={canExpand ? isExpanded : undefined}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault()

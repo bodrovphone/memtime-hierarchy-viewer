@@ -80,6 +80,39 @@ describe('TreeNode', () => {
     expect(onExpand).not.toHaveBeenCalled()
   })
 
+  it('calls onTaskClick when clicking task node', async () => {
+    const user = userEvent.setup()
+    const onTaskClick = vi.fn()
+    render(
+      <TreeNode {...defaultProps} type="task" id={42} onTaskClick={onTaskClick} />,
+    )
+
+    await user.click(screen.getByRole('button'))
+    expect(onTaskClick).toHaveBeenCalledWith(42)
+  })
+
+  it('has aria-expanded attribute for expandable nodes', async () => {
+    const user = userEvent.setup()
+    const onExpand = vi.fn().mockResolvedValue(undefined)
+    render(<TreeNode {...defaultProps} type="client" onExpand={onExpand} />)
+
+    const button = screen.getByRole('button')
+    expect(button).toHaveAttribute('aria-expanded', 'false')
+
+    await user.click(button)
+
+    await waitFor(() => {
+      expect(button).toHaveAttribute('aria-expanded', 'true')
+    })
+  })
+
+  it('does not have aria-expanded attribute for task nodes', () => {
+    render(<TreeNode {...defaultProps} type="task" />)
+
+    const button = screen.getByRole('button')
+    expect(button).not.toHaveAttribute('aria-expanded')
+  })
+
   it('shows loading state while expanding', async () => {
     const user = userEvent.setup()
     const onExpand = vi.fn(

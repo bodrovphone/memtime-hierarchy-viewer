@@ -59,9 +59,10 @@ Visit [http://localhost:3000](http://localhost:3000)
 src/
 ├── api/          # Server functions for Memtime API
 ├── components/   # Reusable UI components
+├── constants/    # Shared constants (pagination, etc.)
 ├── routes/       # File-based routing (TanStack Router)
 ├── types/        # TypeScript interfaces
-├── utils/        # Utility functions (date formatting, etc.)
+├── utils/        # Utility functions (date, clipboard, tree)
 └── test/         # Test setup and utilities
 ```
 
@@ -83,11 +84,13 @@ npm run test:coverage  # Run tests with coverage report
 | ------------------- | ---------- | -------- | --------- | -------- |
 | `utils/date.ts`     | 100%       | 100%     | 100%      | 100%     |
 | `utils/tree.ts`     | 100%       | 100%     | 100%      | 100%     |
+| `utils/clipboard.ts`| 100%       | 100%     | 100%      | 100%     |
 | `Pagination.tsx`    | 100%       | 100%     | 66%       | 100%     |
 | `Header.tsx`        | 100%       | 100%     | 71%       | 100%     |
 | `TimeEntryForm.tsx` | 100%       | 90%      | 100%      | 100%     |
-| `TreeNode.tsx`      | 98%        | 94%      | 100%      | 98%      |
-| **Overall**         | **~75%**   | **~94%** | **~85%**  | **~75%** |
+| `TreeNode.tsx`      | 100%       | 94%      | 100%      | 100%     |
+| `Toast.tsx`         | 100%       | 100%     | 100%      | 100%     |
+| **Overall**         | **75%**    | **90%**  | **74%**   | **75%**  |
 
 **Target:** 50%+ statement coverage ✓
 
