@@ -24,6 +24,7 @@ export interface TreeNodeProps {
   loadedCount?: number
   onExpand: (id: string | number, type: TreeNodeType) => Promise<void>
   onLoadMore: (id: string | number, type: TreeNodeType) => Promise<void>
+  onTaskClick?: (id: string | number) => void
   children?: React.ReactNode
 }
 
@@ -56,6 +57,7 @@ export function TreeNode({
   loadedCount,
   onExpand,
   onLoadMore,
+  onTaskClick,
   children,
 }: TreeNodeProps) {
   const [isExpanded, setIsExpanded] = useState(false)
@@ -67,7 +69,11 @@ export function TreeNode({
   const indentPx = calculateIndent(depth)
 
   const handleToggle = useCallback(async () => {
-    if (!canExpand) return
+    // For tasks, trigger the click callback instead of expanding
+    if (!canExpand) {
+      onTaskClick?.(id)
+      return
+    }
 
     if (!hasLoaded) {
       setIsLoading(true)
@@ -83,7 +89,7 @@ export function TreeNode({
     } else {
       setIsExpanded(!isExpanded)
     }
-  }, [canExpand, hasLoaded, isExpanded, id, type, onExpand])
+  }, [canExpand, hasLoaded, isExpanded, id, type, onExpand, onTaskClick])
 
   const handleLoadMore = useCallback(async () => {
     setIsLoadingMore(true)

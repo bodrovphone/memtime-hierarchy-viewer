@@ -3,7 +3,9 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Loader2, RefreshCw, AlertCircle } from 'lucide-react'
 
 import { TreeNode, TreeNodeSkeleton } from '@/components/TreeNode'
+import { Toast } from '@/components/Toast'
 import { getClients, getProjects, getTasks } from '@/api/memtime'
+import { copyToClipboard } from '@/utils/clipboard'
 import type { Client, Project, Task, TreeNodeType } from '@/types/memtime'
 
 // =============================================================================
@@ -66,6 +68,19 @@ function HierarchyPage() {
   })
 
   const [error, setError] = useState<string | null>(null)
+  const [toast, setToast] = useState<string | null>(null)
+
+  // ---------------------------------------------------------------------------
+  // Handle Task Click - Copy ID to Clipboard
+  // ---------------------------------------------------------------------------
+  const handleTaskClick = useCallback(async (taskId: string | number) => {
+    try {
+      await copyToClipboard(String(taskId))
+      setToast(`Task ID ${taskId} copied to clipboard`)
+    } catch {
+      setError('Failed to copy to clipboard')
+    }
+  }, [])
 
   // ---------------------------------------------------------------------------
   // Load Projects for a Client
@@ -315,6 +330,7 @@ function HierarchyPage() {
                             hasMore={false}
                             onExpand={handleExpand}
                             onLoadMore={() => Promise.resolve()}
+                            onTaskClick={handleTaskClick}
                           />
                         ))}
                       </TreeNode>
@@ -335,6 +351,9 @@ function HierarchyPage() {
           </div>
         </div>
       </div>
+
+      {/* Toast Notification */}
+      {toast && <Toast message={toast} onClose={() => setToast(null)} />}
     </div>
   )
 }

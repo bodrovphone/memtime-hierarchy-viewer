@@ -26,6 +26,14 @@ Utilities for the hierarchy tree view component.
 | `calculateIndent(depth, base?)` | Calculates indentation pixels for tree depth |
 | `canNodeExpand(type)`           | Checks if a node type can have children      |
 
+### `clipboard.ts`
+
+Clipboard utilities with fallback support.
+
+| Function              | Description                                        |
+| --------------------- | -------------------------------------------------- |
+| `copyToClipboard(text)` | Copies text to clipboard (with legacy fallback)  |
+
 ## Usage Examples
 
 ### Date utilities
@@ -64,3 +72,4 @@ All utility functions have 100% test coverage:
 
 - `date.test.ts` - 17 tests
 - `tree.test.ts` - 11 tests
+- `clipboard.test.ts` - 3 tests
