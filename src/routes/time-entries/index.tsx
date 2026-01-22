@@ -12,9 +12,8 @@ import {
 import { getTimeEntries } from '@/api/memtime'
 import { Pagination } from '@/components/Pagination'
 import { formatDateTime } from '@/utils/date'
+import { DEFAULT_PAGE_SIZE } from '@/constants/pagination'
 import type { TimeEntry } from '@/types/memtime'
-
-const ITEMS_PER_PAGE = 10
 
 type SearchParams = {
   page?: number
@@ -32,8 +31,8 @@ export const Route = createFileRoute('/time-entries/')({
   },
   loaderDeps: ({ search: { page } }) => ({ page }),
   loader: async ({ deps: { page } }) => {
-    const offset = ((page ?? 1) - 1) * ITEMS_PER_PAGE
-    return getTimeEntries({ data: { limit: ITEMS_PER_PAGE, offset } })
+    const offset = ((page ?? 1) - 1) * DEFAULT_PAGE_SIZE
+    return getTimeEntries({ data: { limit: DEFAULT_PAGE_SIZE, offset } })
   },
   pendingComponent: LoadingState,
   errorComponent: ErrorState,
@@ -232,7 +231,7 @@ function TimeEntriesPage() {
               <Pagination
                 currentPage={currentPage}
                 totalItems={total}
-                itemsPerPage={ITEMS_PER_PAGE}
+                itemsPerPage={DEFAULT_PAGE_SIZE}
                 onPageChange={handlePageChange}
               />
             </>

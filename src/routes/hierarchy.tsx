@@ -6,30 +6,9 @@ import { TreeNode, TreeNodeSkeleton } from '@/components/TreeNode'
 import { Toast } from '@/components/Toast'
 import { getClients, getProjects, getTasks } from '@/api/memtime'
 import { copyToClipboard } from '@/utils/clipboard'
+import { DEFAULT_DEFAULT_PAGE_SIZE } from '@/constants/pagination'
 import type { Client, Project, Task, TreeNodeType } from '@/types/memtime'
-
-// =============================================================================
-// Constants
-// =============================================================================
-
-const PAGE_SIZE = 10
-
-// =============================================================================
-// Types for State Management
-// =============================================================================
-
-interface NodeState {
-  items: Array<Client | Project | Task>
-  total: number
-  loaded: number
-  hasMore: boolean
-}
-
-interface HierarchyState {
-  clients: NodeState
-  projects: Record<string, NodeState> // keyed by clientId
-  tasks: Record<string, NodeState> // keyed by projectId
-}
+import type { HierarchyState } from '@/types/hierarchy'
 
 // =============================================================================
 // Route Definition
@@ -38,7 +17,9 @@ interface HierarchyState {
 export const Route = createFileRoute('/hierarchy')({
   component: HierarchyPage,
   loader: async () => {
-    const response = await getClients({ data: { limit: PAGE_SIZE, offset: 0 } })
+    const response = await getClients({
+      data: { limit: DEFAULT_PAGE_SIZE, offset: 0 },
+    })
     return response
   },
   pendingComponent: LoadingState,
@@ -89,7 +70,7 @@ function HierarchyPage() {
     try {
       setError(null)
       const response = await getProjects({
-        data: { clientId, limit: PAGE_SIZE, offset: 0 },
+        data: { clientId, limit: DEFAULT_PAGE_SIZE, offset: 0 },
       })
 
       setState((prev) => ({
@@ -117,7 +98,7 @@ function HierarchyPage() {
     try {
       setError(null)
       const response = await getTasks({
-        data: { projectId, limit: PAGE_SIZE, offset: 0 },
+        data: { projectId, limit: DEFAULT_PAGE_SIZE, offset: 0 },
       })
 
       setState((prev) => ({
@@ -164,7 +145,7 @@ function HierarchyPage() {
           // Load more clients
           const currentOffset = state.clients.loaded
           const response = await getClients({
-            data: { limit: PAGE_SIZE, offset: currentOffset },
+            data: { limit: DEFAULT_PAGE_SIZE, offset: currentOffset },
           })
 
           setState((prev) => ({
@@ -185,7 +166,7 @@ function HierarchyPage() {
           const response = await getProjects({
             data: {
               clientId: id,
-              limit: PAGE_SIZE,
+              limit: DEFAULT_PAGE_SIZE,
               offset: projectState.loaded,
             },
           })
@@ -210,7 +191,11 @@ function HierarchyPage() {
           if (!taskState) return
 
           const response = await getTasks({
-            data: { projectId: id, limit: PAGE_SIZE, offset: taskState.loaded },
+            data: {
+              projectId: id,
+              limit: DEFAULT_PAGE_SIZE,
+              offset: taskState.loaded,
+            },
           })
 
           setState((prev) => ({

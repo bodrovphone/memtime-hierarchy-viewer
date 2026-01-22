@@ -24,8 +24,13 @@ Type definitions for the Memtime API integration:
 **UI State Types:**
 
 - `TreeNodeType` - Union type for hierarchy levels ('client' | 'project' | 'task')
-- `TreeNodeData` - Data structure for tree view nodes
-- `TreeState` - State management for the hierarchy tree
+
+### `hierarchy.ts`
+
+Types for the hierarchy tree view state management:
+
+- `NodeState` - State for a node level (items, total, loaded, hasMore)
+- `HierarchyState` - Complete tree state (clients, projects, tasks records)
 
 ## Conventions
 
