@@ -1,6 +1,12 @@
 import { useState } from 'react'
 import { useNavigate, Link } from '@tanstack/react-router'
-import { Loader2, AlertCircle, Clock, ExternalLink, Calendar } from 'lucide-react'
+import {
+  Loader2,
+  AlertCircle,
+  Clock,
+  ExternalLink,
+  Calendar,
+} from 'lucide-react'
 import type { TimeEntry } from '@/types/memtime'
 
 interface TimeEntryFormProps {
@@ -11,7 +17,7 @@ interface TimeEntryFormProps {
     comment: string
     start: string
     end: string
-  }) => Promise<void>
+  }) => Promise<TimeEntry>
 }
 
 function toDateTimeLocal(isoString: string): string {
@@ -81,13 +87,19 @@ export function TimeEntryForm({
 
     setIsSubmitting(true)
     try {
-      await onSubmit({
+      const result = await onSubmit({
         taskId: parseInt(taskId, 10),
         comment: comment.trim(),
         start: toISOString(start),
         end: toISOString(end),
       })
-      navigate({ to: '/time-entries' })
+      navigate({
+        to: '/time-entries',
+        search: {
+          success: mode === 'create' ? 'created' : 'updated',
+          entryId: String(result.id),
+        },
+      })
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save time entry')
     } finally {
@@ -210,8 +222,7 @@ export function TimeEntryForm({
           <span>
             Duration:{' '}
             {(() => {
-              const diffMs =
-                new Date(end).getTime() - new Date(start).getTime()
+              const diffMs = new Date(end).getTime() - new Date(start).getTime()
               const hours = Math.floor(diffMs / (1000 * 60 * 60))
               const minutes = Math.floor(
                 (diffMs % (1000 * 60 * 60)) / (1000 * 60),

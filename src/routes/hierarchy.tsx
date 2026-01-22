@@ -168,7 +168,11 @@ function HierarchyPage() {
           if (!projectState) return
 
           const response = await getProjects({
-            data: { clientId: id, limit: PAGE_SIZE, offset: projectState.loaded },
+            data: {
+              clientId: id,
+              limit: PAGE_SIZE,
+              offset: projectState.loaded,
+            },
           })
 
           setState((prev) => ({
@@ -209,7 +213,9 @@ function HierarchyPage() {
           }))
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load more items')
+        setError(
+          err instanceof Error ? err.message : 'Failed to load more items',
+        )
       }
     },
     [state],
@@ -250,7 +256,8 @@ function HierarchyPage() {
           {/* Tree Header */}
           <div className="px-4 py-3 border-b border-gray-700 flex items-center justify-between">
             <span className="text-sm text-gray-400">
-              {state.clients.total} client{state.clients.total !== 1 ? 's' : ''} total
+              {state.clients.total} client{state.clients.total !== 1 ? 's' : ''}{' '}
+              total
             </span>
             <button
               onClick={() => window.location.reload()}

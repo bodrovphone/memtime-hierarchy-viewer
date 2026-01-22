@@ -104,7 +104,9 @@ function FeatureCard({
       <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-blue-400 transition-colors">
         {title}
       </h3>
-      <p className="text-gray-400 text-sm leading-relaxed mb-4">{description}</p>
+      <p className="text-gray-400 text-sm leading-relaxed mb-4">
+        {description}
+      </p>
       <span className="text-blue-400 text-sm flex items-center gap-1 group-hover:gap-2 transition-all">
         Explore <ArrowRight className="w-4 h-4" />
       </span>

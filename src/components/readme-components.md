@@ -4,12 +4,12 @@ Reusable React components for the Memtime Viewer application.
 
 ## Components
 
-| Component | File | Description |
-|-----------|------|-------------|
-| `Header` | `Header.tsx` | App header with navigation |
-| `TreeNode` | `TreeNode.tsx` | Expandable tree node for hierarchy |
-| `Pagination` | `Pagination.tsx` | Page navigation for lists |
-| `TimeEntryForm` | `TimeEntryForm.tsx` | Create/edit form (pending) |
+| Component       | File                | Description                        |
+| --------------- | ------------------- | ---------------------------------- |
+| `Header`        | `Header.tsx`        | App header with navigation         |
+| `TreeNode`      | `TreeNode.tsx`      | Expandable tree node for hierarchy |
+| `Pagination`    | `Pagination.tsx`    | Page navigation for lists          |
+| `TimeEntryForm` | `TimeEntryForm.tsx` | Create/edit form (pending)         |
 
 ---
 
@@ -18,18 +18,21 @@ Reusable React components for the Memtime Viewer application.
 Global navigation header used in root layout.
 
 **Features:**
+
 - Desktop horizontal navigation
 - Mobile hamburger menu with slide-out sidebar
 - Active link highlighting
 - Memtime branding with clock icon
 
 **Usage:**
+
 ```tsx
 // In __root.tsx
 <Header />
 ```
 
 **Navigation Links:**
+
 - Home (`/`)
 - Hierarchy (`/hierarchy`)
 - Time Entries (`/time-entries`)
@@ -55,6 +58,7 @@ Expandable/collapsible node for displaying hierarchical data.
 | `children` | `ReactNode` | Nested TreeNode components |
 
 **Features:**
+
 - Lazy loading on expand
 - Loading spinner during fetch
 - Type-specific icons (Building2, FolderOpen, CheckSquare)
@@ -78,6 +82,7 @@ Reusable pagination component for tables and lists.
 | `onPageChange` | `(page: number) => void` | Page change handler |
 
 **Features:**
+
 - Previous/Next buttons
 - Page number buttons with ellipsis
 - "Showing X to Y of Z results" text
@@ -85,6 +90,7 @@ Reusable pagination component for tables and lists.
 - Disabled states at boundaries
 
 **Usage:**
+
 ```tsx
 <Pagination
   currentPage={1}
@@ -109,6 +115,7 @@ Shared form component for creating and editing time entries.
 | `onSubmit` | `(data) => Promise<void>` | Form submission handler |
 
 **Features:**
+
 - Task dropdown showing Client → Project → Task path
 - DateTime pickers for start/end (datetime-local inputs)
 - Comment textarea
@@ -119,6 +126,7 @@ Shared form component for creating and editing time entries.
 - Cancel button returns to list
 
 **Usage:**
+
 ```tsx
 <TimeEntryForm
   mode="create"

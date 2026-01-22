@@ -145,11 +145,14 @@ export function TreeNode({
         {getNodeIcon(type)}
 
         {/* Name */}
-        <span className="flex-1 text-gray-100 font-medium truncate">{name}</span>
+        <span className="flex-1 text-gray-100 font-medium truncate">
+          {name}
+        </span>
 
         {/* Type Badge with ID for tasks */}
         <span className="text-xs text-gray-500 px-2 py-0.5 bg-gray-800 rounded">
-          {getNodeLabel(type)}{type === 'task' && ` #${id}`}
+          {getNodeLabel(type)}
+          {type === 'task' && ` #${id}`}
         </span>
 
         {/* Count Badge (if has children) */}
@@ -172,10 +175,7 @@ export function TreeNode({
 
           {/* Load More Button */}
           {hasMore && loadedCount !== undefined && totalCount !== undefined && (
-            <div
-              className="py-2"
-              style={{ paddingLeft: `${indentPx + 48}px` }}
-            >
+            <div className="py-2" style={{ paddingLeft: `${indentPx + 48}px` }}>
               <button
                 onClick={(e) => {
                   e.stopPropagation()

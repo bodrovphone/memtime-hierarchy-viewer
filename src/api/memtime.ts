@@ -211,7 +211,9 @@ export const updateTimeEntry = createServerFn({ method: 'POST' })
 // =============================================================================
 
 export const getAllTasks = createServerFn({ method: 'GET' }).handler(
-  async (): Promise<Array<Task & { projectName: string; clientName: string }>> => {
+  async (): Promise<
+    Array<Task & { projectName: string; clientName: string }>
+  > => {
     const allTasks: Array<Task & { projectName: string; clientName: string }> =
       []
 

@@ -1,12 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
-import {
-  Home,
-  Menu,
-  X,
-  Network,
-  Clock,
-} from 'lucide-react'
+import { Home, Menu, X, Network, Clock } from 'lucide-react'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
@@ -43,7 +37,10 @@ export default function Header() {
           <Link
             to="/"
             className="px-3 py-2 text-sm rounded-lg hover:bg-slate-800 transition-colors"
-            activeProps={{ className: 'px-3 py-2 text-sm rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors' }}
+            activeProps={{
+              className:
+                'px-3 py-2 text-sm rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors',
+            }}
             activeOptions={{ exact: true }}
           >
             Home
@@ -51,14 +48,20 @@ export default function Header() {
           <Link
             to="/hierarchy"
             className="px-3 py-2 text-sm rounded-lg hover:bg-slate-800 transition-colors"
-            activeProps={{ className: 'px-3 py-2 text-sm rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors' }}
+            activeProps={{
+              className:
+                'px-3 py-2 text-sm rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors',
+            }}
           >
             Hierarchy
           </Link>
           <Link
             to="/time-entries"
             className="px-3 py-2 text-sm rounded-lg hover:bg-slate-800 transition-colors"
-            activeProps={{ className: 'px-3 py-2 text-sm rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors' }}
+            activeProps={{
+              className:
+                'px-3 py-2 text-sm rounded-lg bg-blue-600 hover:bg-blue-700 transition-colors',
+            }}
           >
             Time Entries
           </Link>

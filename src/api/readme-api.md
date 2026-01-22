@@ -9,26 +9,28 @@ Server-side API client for Memtime integration using TanStack Start server funct
 ### `memtime.ts`
 
 All API calls to the Memtime backend. Uses `createServerFn` to ensure:
+
 - API key stays server-side (security)
 - Consistent error handling
 - Type-safe request/response flow
 
 ## Server Functions
 
-| Function | Method | Endpoint | Purpose |
-|----------|--------|----------|---------|
-| `getClients` | GET | `/clients` | Fetch paginated clients |
-| `getProjects` | GET | `/clients/:id/projects` | Fetch projects for a client |
-| `getTasks` | GET | `/projects/:id/tasks` | Fetch tasks for a project |
-| `getTimeEntries` | GET | `/time-entries` | Fetch paginated time entries |
-| `getTimeEntry` | GET | `/time-entries/:id` | Fetch single time entry |
-| `createTimeEntry` | POST | `/time-entries` | Create new time entry |
-| `updateTimeEntry` | POST→PUT | `/time-entries/:id` | Update existing time entry |
-| `getAllTasks` | GET | Multiple | Fetch all tasks with context |
+| Function          | Method   | Endpoint                | Purpose                      |
+| ----------------- | -------- | ----------------------- | ---------------------------- |
+| `getClients`      | GET      | `/clients`              | Fetch paginated clients      |
+| `getProjects`     | GET      | `/clients/:id/projects` | Fetch projects for a client  |
+| `getTasks`        | GET      | `/projects/:id/tasks`   | Fetch tasks for a project    |
+| `getTimeEntries`  | GET      | `/time-entries`         | Fetch paginated time entries |
+| `getTimeEntry`    | GET      | `/time-entries/:id`     | Fetch single time entry      |
+| `createTimeEntry` | POST     | `/time-entries`         | Create new time entry        |
+| `updateTimeEntry` | POST→PUT | `/time-entries/:id`     | Update existing time entry   |
+| `getAllTasks`     | GET      | Multiple                | Fetch all tasks with context |
 
 ## Configuration
 
 API configuration is read from environment variables:
+
 - `MEMTIME_API_KEY` - Bearer token for authentication
 
 Base URL: `https://interview-api.memtime-demo.deno.net/api/v1`
@@ -43,13 +45,14 @@ const clients = await getClients({ data: { limit: 10, offset: 0 } })
 
 // In a component action
 const entry = await createTimeEntry({
-  data: { taskId, comment, start, end }
+  data: { taskId, comment, start, end },
 })
 ```
 
 ## Error Handling
 
 All functions throw errors with meaningful messages for:
+
 - Network failures
 - 4xx/5xx API responses
 - Missing configuration

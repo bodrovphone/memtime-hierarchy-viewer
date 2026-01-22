@@ -22,11 +22,11 @@ Authorization: Bearer <API_KEY>
 
 ### Rate Limiting
 
-| Property | Value |
-|----------|-------|
-| Window | 60 seconds |
-| Limit | 15 requests per window |
-| Key | Based on API key |
+| Property | Value                  |
+| -------- | ---------------------- |
+| Window   | 60 seconds             |
+| Limit    | 15 requests per window |
+| Key      | Based on API key       |
 
 ---
 
@@ -94,14 +94,15 @@ Authorization: Bearer <API_KEY>
 
 All list endpoints support pagination:
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `limit` | number | 10 | Maximum results to return |
-| `offset` | number | 0 | Number of results to skip |
-| `sortBy` | string | — | Field name to sort by |
-| `order` | string | asc | Sort order: `asc` or `desc` |
+| Parameter | Type   | Default | Description                 |
+| --------- | ------ | ------- | --------------------------- |
+| `limit`   | number | 10      | Maximum results to return   |
+| `offset`  | number | 0       | Number of results to skip   |
+| `sortBy`  | string | —       | Field name to sort by       |
+| `order`   | string | asc     | Sort order: `asc` or `desc` |
 
 **Example:**
+
 ```
 GET /api/v1/clients?limit=20&offset=0&sortBy=name&order=asc
 ```
@@ -123,6 +124,7 @@ Returns a paginated list of all clients.
 **Query Parameters:** `limit`, `offset`, `sortBy`, `order`
 
 **Response:** `200 OK`
+
 ```json
 [
   {
@@ -147,11 +149,13 @@ GET /api/v1/clients/:id
 Retrieves a specific client by ID.
 
 **Path Parameters:**
+
 - `id` (required): Client ID
 
 **Response:** `200 OK` - Client object
 
 **Error:** `404 Not Found`
+
 ```json
 {
   "error": "Client not found"
@@ -171,11 +175,13 @@ GET /api/v1/clients/:id/projects
 Retrieves all projects belonging to a specific client.
 
 **Path Parameters:**
+
 - `id` (required): Client ID
 
 **Query Parameters:** `limit`, `offset`, `sortBy`, `order`
 
 **Response:** `200 OK`
+
 ```json
 [
   {
@@ -200,11 +206,13 @@ GET /api/v1/projects/:id
 Retrieves a specific project by ID.
 
 **Path Parameters:**
+
 - `id` (required): Project ID
 
 **Response:** `200 OK` - Project object
 
 **Error:** `404 Not Found`
+
 ```json
 {
   "error": "Project not found"
@@ -224,11 +232,13 @@ GET /api/v1/projects/:id/tasks
 Retrieves all tasks belonging to a specific project.
 
 **Path Parameters:**
+
 - `id` (required): Project ID
 
 **Query Parameters:** `limit`, `offset`, `sortBy`, `order`
 
 **Response:** `200 OK`
+
 ```json
 [
   {
@@ -253,11 +263,13 @@ GET /api/v1/tasks/:id
 Retrieves a specific task by ID.
 
 **Path Parameters:**
+
 - `id` (required): Task ID
 
 **Response:** `200 OK` - Task object
 
 **Error:** `404 Not Found`
+
 ```json
 {
   "error": "Task not found"
@@ -279,6 +291,7 @@ Retrieves all time entries for the authenticated user.
 **Query Parameters:** `limit`, `offset`, `sortBy`, `order`
 
 **Response:** `200 OK`
+
 ```json
 [
   {
@@ -295,6 +308,7 @@ Retrieves all time entries for the authenticated user.
 ```
 
 **Error:** `404 Not Found`
+
 ```json
 {
   "error": "Unknown user"
@@ -312,11 +326,13 @@ GET /api/v1/time-entries/:id
 Retrieves a specific time entry by ID. Only returns entries belonging to the authenticated user.
 
 **Path Parameters:**
+
 - `id` (required): Time Entry ID
 
 **Response:** `200 OK` - TimeEntry object
 
 **Error:** `404 Not Found`
+
 ```json
 {
   "error": "Time entry not found"
@@ -334,6 +350,7 @@ POST /api/v1/time-entries
 Creates a new time entry for the authenticated user.
 
 **Request Body:**
+
 ```json
 {
   "taskId": 1,
@@ -343,16 +360,17 @@ Creates a new time entry for the authenticated user.
 }
 ```
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `taskId` | number | Yes | Task ID to associate |
-| `comment` | string | Yes | Description of work |
-| `start` | string | Yes | Start time (ISO 8601) |
-| `end` | string | Yes | End time (ISO 8601) |
+| Field     | Type   | Required | Description           |
+| --------- | ------ | -------- | --------------------- |
+| `taskId`  | number | Yes      | Task ID to associate  |
+| `comment` | string | Yes      | Description of work   |
+| `start`   | string | Yes      | Start time (ISO 8601) |
+| `end`     | string | Yes      | End time (ISO 8601)   |
 
 **Response:** `201 Created` - TimeEntry object
 
 **Error:** `400 Bad Request`
+
 ```json
 {
   "error": "Invalid JSON body"
@@ -370,6 +388,7 @@ PUT /api/v1/time-entries/:id
 Updates an existing time entry.
 
 **Path Parameters:**
+
 - `id` (required): Time Entry ID
 
 **Request Body:** Same as Create
@@ -377,6 +396,7 @@ Updates an existing time entry.
 **Response:** `200 OK` - Updated TimeEntry object
 
 **Errors:**
+
 - `400 Bad Request` - Invalid request body
 - `404 Not Found` - Time entry not found
 
@@ -391,9 +411,11 @@ DELETE /api/v1/time-entries/:id
 Deletes a time entry.
 
 **Path Parameters:**
+
 - `id` (required): Time Entry ID
 
 **Response:** `200 OK`
+
 ```json
 {
   "message": "Time entry deleted successfully"
@@ -401,6 +423,7 @@ Deletes a time entry.
 ```
 
 **Error:** `404 Not Found`
+
 ```json
 {
   "error": "Time entry not found"
@@ -413,15 +436,15 @@ Deletes a time entry.
 
 ### HTTP Status Codes
 
-| Code | Description |
-|------|-------------|
-| `200` | Successful request |
-| `201` | Resource created successfully |
+| Code  | Description                                |
+| ----- | ------------------------------------------ |
+| `200` | Successful request                         |
+| `201` | Resource created successfully              |
 | `400` | Invalid request (bad JSON, missing fields) |
-| `401` | Missing or invalid authentication |
-| `404` | Resource not found |
-| `429` | Rate limit exceeded |
-| `500` | Internal server error |
+| `401` | Missing or invalid authentication          |
+| `404` | Resource not found                         |
+| `429` | Rate limit exceeded                        |
+| `500` | Internal server error                      |
 
 ### Error Response Format
 
@@ -460,6 +483,7 @@ GET /health
 Simple health check endpoint (no authentication required).
 
 **Response:** `200 OK`
+
 ```
 I'm alive!
 ```

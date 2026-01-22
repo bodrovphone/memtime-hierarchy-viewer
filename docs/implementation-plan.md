@@ -3,6 +3,7 @@
 ## Overview
 
 Build a time-tracking application with three main features using the Memtime API:
+
 1. Hierarchical tree view (Clients → Projects → Tasks)
 2. Paginated time entries table
 3. Time entry create/update form
@@ -15,27 +16,30 @@ Build a time-tracking application with three main features using the Memtime API
 
 ## Progress Tracker
 
-| Phase | Status | Notes |
-|-------|--------|-------|
-| 1. Setup | ✅ Complete | Types, API client, environment |
-| 2. Task 1: Hierarchy | ✅ Complete | Tree view with lazy loading, expand/collapse, pagination |
-| 3. Task 2: Time Entries | ✅ Complete | Paginated table with duration display |
-| 4. Task 3: Forms | ✅ Complete | Create/edit forms with task dropdown, validation |
-| 5. Polish | ⬜ Not Started | |
-| 6. Cleanup | ✅ Complete | Demo files deleted, home page updated |
+| Phase                   | Status      | Notes                                                    |
+| ----------------------- | ----------- | -------------------------------------------------------- |
+| 1. Setup                | ✅ Complete | Types, API client, environment                           |
+| 2. Task 1: Hierarchy    | ✅ Complete | Tree view with lazy loading, expand/collapse, pagination |
+| 3. Task 2: Time Entries | ✅ Complete | Paginated table with duration display                    |
+| 4. Task 3: Forms        | ✅ Complete | Create/edit forms with task ID input, validation         |
+| 5. Polish               | ✅ Complete | Loading/error states, consistent backgrounds             |
+| 6. Cleanup              | ✅ Complete | Demo files deleted, home page updated                    |
 
 ---
 
 ## Architecture Decisions
 
 ### Data Fetching Strategy
+
 Use **server functions** (`createServerFn`) for all API calls because:
+
 - Hides API key from client (security)
 - Handles rate limiting server-side
 - Provides type-safe data flow
 - Enables caching and error handling
 
 ### Route Structure
+
 ```
 src/routes/
 ├── index.tsx              # Home/landing (modify existing)
@@ -47,6 +51,7 @@ src/routes/
 ```
 
 ### Shared Code
+
 ```
 src/
 ├── api/
@@ -65,6 +70,7 @@ src/
 ## Phase 1: Setup ✅ COMPLETE
 
 ### Completed Items
+
 - [x] **`src/types/memtime.ts`** - TypeScript interfaces for all API entities
 - [x] **`src/api/memtime.ts`** - Server functions for all API endpoints
 - [x] **`.env`** - API key configuration
@@ -74,6 +80,7 @@ src/
 - [x] **`docs/api-v1-documentation.md`** - Full API reference in markdown
 
 ### Key Discoveries
+
 - API returns **plain arrays**, not paginated wrapper objects
 - IDs are **numbers**, not strings
 - Task uses `parent` field (not `projectId`) for hierarchy
@@ -84,12 +91,14 @@ src/
 ## Phase 2: Task 1 - Hierarchical Data Display 🔄 IN PROGRESS
 
 ### Completed Items
+
 - [x] **`src/api/memtime.ts`** - API client with server functions:
   - `getClients(limit, offset)` → GET `/clients`
   - `getProjects(clientId, limit, offset)` → GET `/clients/:id/projects`
   - `getTasks(projectId, limit, offset)` → GET `/projects/:id/tasks`
 
 - [x] **`src/types/memtime.ts`** - Type definitions updated to match actual API:
+
   ```typescript
   interface Client { id: number; name: string; description: string; status: string; ... }
   interface Project { id: number; clientId: number; name: string; status: string; ... }
@@ -116,12 +125,14 @@ src/
   - Memtime branding
 
 ### Remaining Items
+
 - [ ] Verify hierarchy page loads correctly
 - [ ] Test expand/collapse functionality
 - [ ] Test "load more" pagination
 - [ ] Remove debug logging from API
 
 ### UI Design
+
 - Dark theme matching existing app
 - Indented tree with expand/collapse icons
 - Loading spinners for lazy-loaded children
@@ -132,6 +143,7 @@ src/
 ## Phase 3: Task 2 - Time Entries List ⬜ NOT STARTED
 
 ### Implementation
+
 1. **Add to `src/api/memtime.ts`**: ✅ Already done
    - `getTimeEntries(limit, offset)` → GET `/time-entries`
 
@@ -147,6 +159,7 @@ src/
    - Link to edit form for each row
 
 ### UI Design
+
 - Responsive table (horizontal scroll on mobile)
 - Formatted dates (user-friendly display)
 - Hover states on rows
@@ -157,6 +170,7 @@ src/
 ## Phase 4: Task 3 - Time Entry Management ⬜ NOT STARTED
 
 ### Implementation
+
 1. **Add to `src/api/memtime.ts`**: ✅ Already done
    - `createTimeEntry(data)` → POST `/time-entries`
    - `updateTimeEntry(id, data)` → PUT `/time-entries/:id`
@@ -181,12 +195,14 @@ src/
    - Handle 404 errors
 
 ### Form Fields
+
 - **Task ID**: Simple dropdown listing all tasks (fetch on form load)
 - **Comment**: Textarea
 - **Start/End**: DateTime inputs (native HTML datetime-local)
 - **Validation**: Required fields, end > start
 
 ### Error Handling
+
 - 400: Display validation errors from API
 - 404: "Time entry not found" message
 - Rate limit: Retry message with countdown
@@ -206,6 +222,7 @@ src/
 ## Phase 6: Cleanup ⬜ NOT STARTED
 
 ### Files to Delete
+
 - [ ] `src/routes/demo/api.names.ts`
 - [ ] `src/routes/demo/start.api-request.tsx`
 - [ ] `src/routes/demo/start.server-funcs.tsx`
@@ -217,6 +234,7 @@ src/
 - [ ] `src/routes/demo/` directory
 
 ### Files to Update
+
 - [ ] `src/routes/index.tsx` - Update home page content
 
 ---
@@ -224,6 +242,7 @@ src/
 ## File Changes Summary
 
 ### New Files Created ✅
+
 - `src/api/memtime.ts` - API client ✅
 - `src/types/memtime.ts` - TypeScript types ✅
 - `src/components/TreeNode.tsx` - Tree node component ✅
@@ -234,6 +253,7 @@ src/
 - `.env` / `.env.example` - Environment config ✅
 
 ### New Files Pending
+
 - `src/components/Pagination.tsx` - Pagination component
 - `src/components/TimeEntryForm.tsx` - Form component
 - `src/routes/time-entries/index.tsx` - Time entries list
@@ -241,6 +261,7 @@ src/
 - `src/routes/time-entries/$id.tsx` - Edit form
 
 ### Modified Files ✅
+
 - `src/components/Header.tsx` - Navigation links ✅
 
 ---
@@ -248,6 +269,7 @@ src/
 ## Environment Setup ✅ COMPLETE
 
 `.env` file created with:
+
 ```
 MEMTIME_API_KEY=t2On0w9hkjQNrfnKEaO7FhsVrfPLXZS2
 ```

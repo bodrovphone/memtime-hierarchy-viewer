@@ -17,6 +17,7 @@ Build a production-ready time-tracking application that integrates with the Memt
 ## 2. Problem Statement
 
 Users need a clean, efficient interface to:
+
 - Navigate hierarchical organizational structures (clients, projects, tasks)
 - View and manage time entries with proper pagination
 - Create and edit time entries with validation and error handling
@@ -28,11 +29,13 @@ The solution must handle API rate limiting gracefully and provide a seamless use
 ## 3. Goals & Success Metrics
 
 ### Goals
+
 - Deliver production-ready code suitable for paying customers
 - Prioritize user experience and intuitive time entry workflows
 - Handle API constraints (rate limiting) without degrading UX
 
 ### Success Metrics
+
 - All three core features fully functional
 - Graceful error handling for all API error states
 - Responsive design working on desktop and mobile
@@ -43,6 +46,7 @@ The solution must handle API rate limiting gracefully and provide a seamless use
 ## 4. Target Users
 
 Time-tracking application users who need to:
+
 - Browse organizational hierarchy to understand project structures
 - Review historical time entries
 - Log new time entries against specific tasks
@@ -57,6 +61,7 @@ Time-tracking application users who need to:
 **Description:** Tree-structured UI displaying Clients → Projects → Tasks hierarchy with lazy loading and pagination.
 
 **User Stories:**
+
 - As a user, I can view all clients in a collapsible tree structure
 - As a user, I can expand a client to see its projects
 - As a user, I can expand a project to see its tasks
@@ -73,6 +78,7 @@ Time-tracking application users who need to:
 | F1.6 | Handle empty states gracefully | Should Have |
 
 **API Endpoints:**
+
 - `GET /clients` - Retrieve all clients (supports `limit`, `offset`)
 - `GET /clients/:id/projects` - Fetch projects for a client (supports `limit`, `offset`)
 - `GET /projects/:id/tasks` - Fetch tasks for a project (supports `limit`, `offset`)
@@ -84,6 +90,7 @@ Time-tracking application users who need to:
 **Description:** Paginated table view of time entries with navigation controls.
 
 **User Stories:**
+
 - As a user, I can view my time entries in a table format
 - As a user, I can navigate between pages of time entries
 - As a user, I can click on an entry to edit it
@@ -101,6 +108,7 @@ Time-tracking application users who need to:
 | F2.7 | Show current page indicator | Should Have |
 
 **API Endpoints:**
+
 - `GET /time-entries` - Fetch time entries (supports `limit`, `offset`)
 
 ---
@@ -110,6 +118,7 @@ Time-tracking application users who need to:
 **Description:** Forms for creating new time entries and editing existing ones.
 
 **User Stories:**
+
 - As a user, I can create a new time entry with task, comment, start time, and end time
 - As a user, I can edit an existing time entry
 - As a user, I see validation errors before submission
@@ -130,11 +139,13 @@ Time-tracking application users who need to:
 | F3.10 | Handle 404 for non-existent time entry IDs | Must Have |
 
 **API Endpoints:**
+
 - `GET /time-entries/:id` - Fetch single time entry (for edit mode)
 - `POST /time-entries` - Create new time entry
 - `PUT /time-entries/:id` - Update existing time entry
 
 **Request Payload:**
+
 ```json
 {
   "taskId": "string (required)",
@@ -150,31 +161,33 @@ Time-tracking application users who need to:
 
 ### 6.1 API Integration
 
-| Property | Value |
-|----------|-------|
-| Base URL | `https://interview-api.memtime-demo.deno.net/api/v1` |
-| Authentication | Bearer token in `Authorization` header |
-| Rate Limit | 15 requests per 60 seconds |
-| Response Format | JSON |
+| Property        | Value                                                |
+| --------------- | ---------------------------------------------------- |
+| Base URL        | `https://interview-api.memtime-demo.deno.net/api/v1` |
+| Authentication  | Bearer token in `Authorization` header               |
+| Rate Limit      | 15 requests per 60 seconds                           |
+| Response Format | JSON                                                 |
 
 ### 6.2 Technology Stack
 
-| Layer | Technology |
-|-------|------------|
-| Framework | TanStack Start (React 19) |
-| Routing | TanStack Router (file-based) |
-| Styling | Tailwind CSS v4 |
-| Build Tool | Vite 7 |
-| Language | TypeScript |
-| Deployment | Netlify |
+| Layer      | Technology                   |
+| ---------- | ---------------------------- |
+| Framework  | TanStack Start (React 19)    |
+| Routing    | TanStack Router (file-based) |
+| Styling    | Tailwind CSS v4              |
+| Build Tool | Vite 7                       |
+| Language   | TypeScript                   |
+| Deployment | Netlify                      |
 
 ### 6.3 Architecture Decisions
 
 **Server Functions for API Calls:**
+
 - All Memtime API calls via `createServerFn` (TanStack Start)
 - Benefits: API key hidden from client, server-side rate limit handling, type-safe data flow
 
 **Route Structure:**
+
 ```
 src/routes/
 ├── index.tsx              # Home page
@@ -189,12 +202,12 @@ src/routes/
 
 ## 7. Error Handling Requirements
 
-| HTTP Status | User-Facing Behavior |
-|-------------|---------------------|
-| 400 | Display validation errors from API response |
-| 404 | Display "Not found" message with navigation option |
-| 429 | Display rate limit message (consider retry countdown) |
-| 5xx | Display generic error with retry option |
+| HTTP Status | User-Facing Behavior                                  |
+| ----------- | ----------------------------------------------------- |
+| 400         | Display validation errors from API response           |
+| 404         | Display "Not found" message with navigation option    |
+| 429         | Display rate limit message (consider retry countdown) |
+| 5xx         | Display generic error with retry option               |
 
 ---
 
@@ -203,6 +216,7 @@ src/routes/
 > **See also:** [Design Reference](./design-reference.md) for detailed visual specifications, color palette, and component patterns based on Memtime's product design.
 
 ### 8.1 Design Principles
+
 - Visual consistency with Memtime's existing product aesthetic
 - Navy header with blue interactive elements and green time entry accents
 - Responsive design (mobile and desktop)
@@ -210,15 +224,18 @@ src/routes/
 - Intuitive navigation between features
 
 ### 8.2 Navigation
+
 - Header with links to: Home, Hierarchy, Time Entries
 - Breadcrumb-style context where appropriate
 
 ### 8.3 Accessibility
+
 - Semantic HTML elements
 - Keyboard navigable interfaces
 - Clear focus indicators
 
 ### 8.4 Key Visual Elements
+
 - **Color scheme:** Navy header, blue CTAs, green for time entries
 - **Typography:** Clean sans-serif, clear hierarchy
 - **Components:** Tree nodes with chevrons, duration badges, card-based layouts
@@ -229,6 +246,7 @@ src/routes/
 ## 9. Out of Scope
 
 The following are explicitly excluded from this version:
+
 - User authentication/login system
 - Time entry deletion
 - Bulk operations on time entries
@@ -242,10 +260,12 @@ The following are explicitly excluded from this version:
 ## 10. Dependencies & Constraints
 
 ### Dependencies
+
 - Memtime API availability
 - Valid API key
 
 ### Constraints
+
 - Rate limit: 15 requests/60 seconds requires lazy loading strategy
 - API key must remain server-side only (security)
 
@@ -254,6 +274,7 @@ The following are explicitly excluded from this version:
 ## 11. Release Criteria
 
 ### Must Have (MVP)
+
 - [ ] Hierarchical tree view with expand/collapse and lazy loading
 - [ ] Time entries table with pagination
 - [ ] Create time entry form with validation
@@ -262,11 +283,13 @@ The following are explicitly excluded from this version:
 - [ ] Responsive layout
 
 ### Should Have
+
 - [ ] Loading skeletons/spinners
 - [ ] Empty state designs
 - [ ] Rate limit handling with user feedback
 
 ### Nice to Have
+
 - [ ] Optimistic UI updates
 - [ ] Keyboard shortcuts
 - [ ] Unit tests for components
@@ -276,6 +299,7 @@ The following are explicitly excluded from this version:
 ## 12. Appendix
 
 ### A. Related Documents
+
 - [Implementation Plan](./implementation-plan.md)
 - [Design Reference](./design-reference.md) - Visual specifications and component patterns
 - [Original Task Requirements](https://lustrous-beijinho-54fcf1.netlify.app/task.html)
@@ -283,6 +307,7 @@ The following are explicitly excluded from this version:
 ### B. API Response Examples
 
 **Client Object:**
+
 ```json
 {
   "id": "string",
@@ -292,6 +317,7 @@ The following are explicitly excluded from this version:
 ```
 
 **Project Object:**
+
 ```json
 {
   "id": "string",
@@ -302,6 +328,7 @@ The following are explicitly excluded from this version:
 ```
 
 **Task Object:**
+
 ```json
 {
   "id": "string",
@@ -312,6 +339,7 @@ The following are explicitly excluded from this version:
 ```
 
 **Time Entry Object:**
+
 ```json
 {
   "id": "string",
@@ -324,6 +352,7 @@ The following are explicitly excluded from this version:
 ```
 
 **Paginated Response:**
+
 ```json
 {
   "data": [],

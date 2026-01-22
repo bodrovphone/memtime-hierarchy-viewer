@@ -45,9 +45,11 @@ export function Pagination({
       <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
         <div>
           <p className="text-sm text-slate-400">
-            Showing <span className="font-medium text-slate-200">{startItem}</span> to{' '}
+            Showing{' '}
+            <span className="font-medium text-slate-200">{startItem}</span> to{' '}
             <span className="font-medium text-slate-200">{endItem}</span> of{' '}
-            <span className="font-medium text-slate-200">{totalItems}</span> results
+            <span className="font-medium text-slate-200">{totalItems}</span>{' '}
+            results
           </p>
         </div>
         <div>

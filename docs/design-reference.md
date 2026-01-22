@@ -9,54 +9,60 @@ Visual and UX patterns derived from Memtime's product interface to ensure our im
 ## 1. Color Palette
 
 ### Primary Colors
-| Name | Usage | Suggested Value |
-|------|-------|-----------------|
-| Navy | Header, navigation background | `#1E293B` |
-| Blue Primary | Buttons, selected states, links, active elements | `#3B82F6` |
-| Blue Light | Hover states, badges, zoom controls | `#DBEAFE` |
+
+| Name         | Usage                                            | Suggested Value |
+| ------------ | ------------------------------------------------ | --------------- |
+| Navy         | Header, navigation background                    | `#1E293B`       |
+| Blue Primary | Buttons, selected states, links, active elements | `#3B82F6`       |
+| Blue Light   | Hover states, badges, zoom controls              | `#DBEAFE`       |
 
 ### Semantic Colors
-| Name | Usage | Suggested Value |
-|------|-------|-----------------|
-| Green | Time entries, success states | `#22C55E` |
-| Green Dark | Time entry text on green bg | `#166534` |
-| Purple | Tooltips, highlights, callouts | `#8B5CF6` |
+
+| Name       | Usage                          | Suggested Value |
+| ---------- | ------------------------------ | --------------- |
+| Green      | Time entries, success states   | `#22C55E`       |
+| Green Dark | Time entry text on green bg    | `#166534`       |
+| Purple     | Tooltips, highlights, callouts | `#8B5CF6`       |
 
 ### Neutral Colors
-| Name | Usage | Suggested Value |
-|------|-------|-----------------|
-| White | Content area backgrounds | `#FFFFFF` |
-| Gray 50 | Card backgrounds, subtle fills | `#F9FAFB` |
-| Gray 100 | Borders, dividers | `#F3F4F6` |
-| Gray 200 | Timeline lines, secondary borders | `#E5E7EB` |
-| Gray 400 | Timestamp text, secondary text | `#9CA3AF` |
-| Gray 600 | Body text | `#4B5563` |
-| Gray 900 | Headings, primary text | `#111827` |
+
+| Name     | Usage                             | Suggested Value |
+| -------- | --------------------------------- | --------------- |
+| White    | Content area backgrounds          | `#FFFFFF`       |
+| Gray 50  | Card backgrounds, subtle fills    | `#F9FAFB`       |
+| Gray 100 | Borders, dividers                 | `#F3F4F6`       |
+| Gray 200 | Timeline lines, secondary borders | `#E5E7EB`       |
+| Gray 400 | Timestamp text, secondary text    | `#9CA3AF`       |
+| Gray 600 | Body text                         | `#4B5563`       |
+| Gray 900 | Headings, primary text            | `#111827`       |
 
 ---
 
 ## 2. Typography
 
 ### Font Family
+
 - **Primary:** System font stack (Inter-like sans-serif)
 - `font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif`
 
 ### Scale
-| Element | Size | Weight | Color |
-|---------|------|--------|-------|
-| Page Title | 24px | 600 | Gray 900 |
-| Section Header | 18px | 600 | Gray 900 |
-| Card Title | 14-16px | 500 | Gray 900 |
-| Body Text | 14px | 400 | Gray 600 |
-| Timestamp | 12-13px | 400 | Gray 400 |
-| Badge/Duration | 12-14px | 500 | Blue Primary or Gray 600 |
-| Small Label | 11-12px | 500 | Gray 400 |
+
+| Element        | Size    | Weight | Color                    |
+| -------------- | ------- | ------ | ------------------------ |
+| Page Title     | 24px    | 600    | Gray 900                 |
+| Section Header | 18px    | 600    | Gray 900                 |
+| Card Title     | 14-16px | 500    | Gray 900                 |
+| Body Text      | 14px    | 400    | Gray 600                 |
+| Timestamp      | 12-13px | 400    | Gray 400                 |
+| Badge/Duration | 12-14px | 500    | Blue Primary or Gray 600 |
+| Small Label    | 11-12px | 500    | Gray 400                 |
 
 ---
 
 ## 3. Layout Patterns
 
 ### App Structure
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │  Header (Navy background)                               │
@@ -73,6 +79,7 @@ Visual and UX patterns derived from Memtime's product interface to ensure our im
 ```
 
 ### Spacing System
+
 - **Base unit:** 4px
 - **Common values:** 8px, 12px, 16px, 24px, 32px
 - **Card padding:** 12-16px
@@ -84,12 +91,14 @@ Visual and UX patterns derived from Memtime's product interface to ensure our im
 ## 4. Component Patterns
 
 ### Timeline Item / Activity Card
+
 ```
 ┌─────────────────────────────────────────┐
 │  [Icon]  Activity Name           30 min │
 │          Optional description           │
 └─────────────────────────────────────────┘
 ```
+
 - Left-aligned app/activity icon (24x24px)
 - Activity name in medium weight
 - Duration badge right-aligned
@@ -97,56 +106,66 @@ Visual and UX patterns derived from Memtime's product interface to ensure our im
 - Blue border on selection
 
 ### Time Entry Card (Green variant)
+
 ```
 ┌─────────────────────────────────────────┐
 │  Project Name                    45 min │  ← Green background
 │  Description text here                  │
 └─────────────────────────────────────────┘
 ```
+
 - Green background (#22C55E with opacity or solid)
 - White or dark green text
 - Rounded corners (8px)
 
 ### Duration Badge
+
 ```
 ┌──────────┐
 │  15 min  │  ← Blue background, white/dark text
 └──────────┘
 ```
+
 - Pill-shaped (full rounded)
 - Small padding (4px 8px)
 - Blue Primary background for active
 - Gray 100 background for inactive
 
 ### Tree Node / Expandable Item
+
 ```
 ▶ Client Name                    [count]
   ▼ Project Name                 [count]
       Task Name
       Task Name
 ```
+
 - Chevron icon for expand/collapse
 - Indentation: 16-24px per level
 - Subtle hover background
 - Count badge for children
 
 ### Zoom Controls
+
 ```
 ┌─────────────────────────────────┐
 │  1 min   5 min   15 min   1 h   │
 └─────────────────────────────────┘
 ```
+
 - Segmented button group
 - Active state: Blue background
 - Inactive: White/gray background
 - Rounded group corners
 
 ### Pagination
+
 ```
 ┌─────────────────────────────────────┐
 │  ← Previous    Page 1 of 5    Next →│
 └─────────────────────────────────────┘
 ```
+
 - Minimal design
 - Disabled state for unavailable actions
 - Current page indicator
@@ -156,28 +175,31 @@ Visual and UX patterns derived from Memtime's product interface to ensure our im
 ## 5. Interactive States
 
 ### Buttons
-| State | Style |
-|-------|-------|
-| Default | Blue background, white text |
-| Hover | Darker blue background |
-| Disabled | Gray background, gray text, no cursor |
+
+| State     | Style                                    |
+| --------- | ---------------------------------------- |
+| Default   | Blue background, white text              |
+| Hover     | Darker blue background                   |
+| Disabled  | Gray background, gray text, no cursor    |
 | Secondary | White background, blue text, blue border |
 
 ### Cards/Rows
-| State | Style |
-|-------|-------|
-| Default | White background |
-| Hover | Gray 50 background |
+
+| State    | Style                                    |
+| -------- | ---------------------------------------- |
+| Default  | White background                         |
+| Hover    | Gray 50 background                       |
 | Selected | Blue border (2px), light blue background |
-| Active | Blue left border accent |
+| Active   | Blue left border accent                  |
 
 ### Form Inputs
-| State | Style |
-|-------|-------|
-| Default | Gray 200 border |
-| Focus | Blue border, subtle blue shadow |
-| Error | Red border, red helper text |
-| Disabled | Gray 100 background |
+
+| State    | Style                           |
+| -------- | ------------------------------- |
+| Default  | Gray 200 border                 |
+| Focus    | Blue border, subtle blue shadow |
+| Error    | Red border, red helper text     |
+| Disabled | Gray 100 background             |
 
 ---
 
@@ -188,6 +210,7 @@ Visual and UX patterns derived from Memtime's product interface to ensure our im
 - **Source suggestion:** Heroicons, Lucide, or similar
 
 ### Common Icons Needed
+
 - Chevron right/down (tree expand/collapse)
 - Clock (time entries)
 - Folder (projects)
@@ -214,13 +237,15 @@ Visual and UX patterns derived from Memtime's product interface to ensure our im
 ## 8. Responsive Considerations
 
 ### Breakpoints
-| Name | Width | Layout |
-|------|-------|--------|
-| Mobile | < 640px | Single column, stacked |
-| Tablet | 640-1024px | Two columns |
-| Desktop | > 1024px | Full multi-column |
+
+| Name    | Width      | Layout                 |
+| ------- | ---------- | ---------------------- |
+| Mobile  | < 640px    | Single column, stacked |
+| Tablet  | 640-1024px | Two columns            |
+| Desktop | > 1024px   | Full multi-column      |
 
 ### Mobile Adaptations
+
 - Collapsible navigation
 - Full-width cards
 - Bottom sheet for forms
@@ -231,18 +256,21 @@ Visual and UX patterns derived from Memtime's product interface to ensure our im
 ## 9. Application to Our Features
 
 ### Hierarchy View
+
 - Use tree node pattern with chevron expand/collapse
 - Client/Project/Task icons for each level
 - Indentation matching Memtime's style
 - "Load more" as subtle link button
 
 ### Time Entries Table
+
 - Clean table with hover states
 - Duration badges for time display
 - Consistent timestamp formatting
 - Row click for edit navigation
 
 ### Time Entry Form
+
 - Card-based form container
 - Consistent input styling
 - Green accent for time entry context

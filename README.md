@@ -42,14 +42,14 @@ Visit [http://localhost:3000](http://localhost:3000)
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start development server |
-| `npm run build` | Build for production |
-| `npm run test` | Run Vitest tests |
-| `npm run lint` | Run ESLint |
-| `npm run format` | Run Prettier |
-| `npm run check` | Format + lint fix |
+| Command          | Description              |
+| ---------------- | ------------------------ |
+| `npm run dev`    | Start development server |
+| `npm run build`  | Build for production     |
+| `npm run test`   | Run Vitest tests         |
+| `npm run lint`   | Run ESLint               |
+| `npm run format` | Run Prettier             |
+| `npm run check`  | Format + lint fix        |
 
 ## Project Structure
 
@@ -73,6 +73,7 @@ Each folder contains a `readme-{folder}.md` with detailed documentation.
 ## API
 
 This app uses the Memtime Interview API:
+
 - **Base URL:** `https://interview-api.memtime-demo.deno.net/api/v1`
 - **Auth:** Bearer token
 - **Rate Limit:** 15 requests per 60 seconds
