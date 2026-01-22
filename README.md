@@ -63,6 +63,62 @@ src/
 
 Each folder contains a `readme-{folder}.md` with detailed documentation.
 
+## Architecture & Data Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              USER INTERFACE                                  │
+├─────────────────┬─────────────────────┬─────────────────────────────────────┤
+│   /hierarchy    │    /time-entries    │    /time-entries/new | /$id         │
+│   (Tree View)   │    (Table View)     │    (Create/Edit Form)               │
+└────────┬────────┴──────────┬──────────┴──────────────┬──────────────────────┘
+         │                   │                         │
+         ▼                   ▼                         ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         TANSTACK ROUTER                                      │
+│  • File-based routing          • URL search params for pagination            │
+│  • Route loaders               • Success state via query params              │
+└────────┬────────────────────────┬────────────────────┬──────────────────────┘
+         │                        │                    │
+         ▼                        ▼                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                      SERVER FUNCTIONS (createServerFn)                       │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
+│  │ getClients   │  │getTimeEntries│  │createTimeEntry│  │getTimeEntry  │     │
+│  │ getProjects  │  │              │  │updateTimeEntry│  │              │     │
+│  │ getTasks     │  │              │  │              │  │              │     │
+│  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘     │
+│         │                 │                 │                 │              │
+│         └─────────────────┴─────────────────┴─────────────────┘              │
+│                                    │                                         │
+│                    ┌───────────────┴───────────────┐                         │
+│                    │  API Key (server-side only)   │                         │
+│                    │  Bearer Token Authentication  │                         │
+│                    └───────────────┬───────────────┘                         │
+└────────────────────────────────────┼────────────────────────────────────────┘
+                                     │
+                                     ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           MEMTIME API                                        │
+│                                                                              │
+│  Base URL: https://interview-api.memtime-demo.deno.net/api/v1               │
+│  Rate Limit: 15 requests / 60 seconds                                        │
+│                                                                              │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
+│  │  /clients   │  │  /projects  │  │   /tasks    │  │/time-entries│         │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘         │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Data Flow Summary
+
+1. **User navigates** to a route (e.g., `/hierarchy`)
+2. **Route loader** calls server function before render
+3. **Server function** adds auth header, calls Memtime API
+4. **API response** flows back through server function (keeps API key hidden)
+5. **Component renders** with loaded data
+6. **User actions** (expand node, paginate, submit form) trigger new server function calls
+
 ## Documentation
 
 - [Product Requirements (PRD)](./docs/PRD.md)
