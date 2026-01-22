@@ -8,6 +8,12 @@ import {
   Calendar,
 } from 'lucide-react'
 import type { TimeEntry } from '@/types/memtime'
+import {
+  toDateTimeLocal,
+  toISOString,
+  formatDuration,
+  isValidDateRange,
+} from '@/utils/date'
 
 interface TimeEntryFormProps {
   mode: 'create' | 'edit'
@@ -18,21 +24,6 @@ interface TimeEntryFormProps {
     start: string
     end: string
   }) => Promise<TimeEntry>
-}
-
-function toDateTimeLocal(isoString: string): string {
-  const date = new Date(isoString)
-  // Format: YYYY-MM-DDTHH:mm
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-  const hours = String(date.getHours()).padStart(2, '0')
-  const minutes = String(date.getMinutes()).padStart(2, '0')
-  return `${year}-${month}-${day}T${hours}:${minutes}`
-}
-
-function toISOString(dateTimeLocal: string): string {
-  return new Date(dateTimeLocal).toISOString()
 }
 
 export function TimeEntryForm({
@@ -78,9 +69,7 @@ export function TimeEntryForm({
       return
     }
 
-    const startDate = new Date(start)
-    const endDate = new Date(end)
-    if (endDate <= startDate) {
+    if (!isValidDateRange(start, end)) {
       setError('End time must be after start time')
       return
     }
@@ -216,20 +205,10 @@ export function TimeEntryForm({
       </div>
 
       {/* Duration Preview */}
-      {start && end && new Date(end) > new Date(start) && (
+      {start && end && isValidDateRange(start, end) && (
         <div className="flex items-center gap-2 text-sm text-slate-400">
           <Clock className="h-4 w-4" />
-          <span>
-            Duration:{' '}
-            {(() => {
-              const diffMs = new Date(end).getTime() - new Date(start).getTime()
-              const hours = Math.floor(diffMs / (1000 * 60 * 60))
-              const minutes = Math.floor(
-                (diffMs % (1000 * 60 * 60)) / (1000 * 60),
-              )
-              return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`
-            })()}
-          </span>
+          <span>Duration: {formatDuration(start, end)}</span>
         </div>
       )}
 

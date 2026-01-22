@@ -8,6 +8,7 @@ import {
   Loader2,
 } from 'lucide-react'
 import type { TreeNodeType } from '@/types/memtime'
+import { getNodeLabel, calculateIndent, canNodeExpand } from '@/utils/tree'
 
 // =============================================================================
 // Types
@@ -27,7 +28,7 @@ export interface TreeNodeProps {
 }
 
 // =============================================================================
-// Icon Helper
+// Icon Helper (returns JSX, stays in component)
 // =============================================================================
 
 function getNodeIcon(type: TreeNodeType) {
@@ -38,17 +39,6 @@ function getNodeIcon(type: TreeNodeType) {
       return <FolderOpen size={18} className="text-amber-400" />
     case 'task':
       return <CheckSquare size={18} className="text-green-400" />
-  }
-}
-
-function getNodeLabel(type: TreeNodeType) {
-  switch (type) {
-    case 'client':
-      return 'Client'
-    case 'project':
-      return 'Project'
-    case 'task':
-      return 'Task'
   }
 }
 
@@ -73,8 +63,8 @@ export function TreeNode({
   const [isLoadingMore, setIsLoadingMore] = useState(false)
   const [hasLoaded, setHasLoaded] = useState(false)
 
-  const canExpand = type !== 'task'
-  const indentPx = depth * 24
+  const canExpand = canNodeExpand(type)
+  const indentPx = calculateIndent(depth)
 
   const handleToggle = useCallback(async () => {
     if (!canExpand) return
@@ -212,7 +202,7 @@ export function TreeNode({
 // =============================================================================
 
 export function TreeNodeSkeleton({ depth = 0 }: { depth?: number }) {
-  const indentPx = depth * 24
+  const indentPx = calculateIndent(depth)
 
   return (
     <div

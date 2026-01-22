@@ -77,7 +77,19 @@ npm run test:watch     # Run tests in watch mode
 npm run test:coverage  # Run tests with coverage report
 ```
 
-**Coverage target:** 50%+ (currently ~75%)
+### Coverage
+
+| File                | Statements | Branches | Functions | Lines    |
+| ------------------- | ---------- | -------- | --------- | -------- |
+| `utils/date.ts`     | 100%       | 100%     | 100%      | 100%     |
+| `utils/tree.ts`     | 100%       | 100%     | 100%      | 100%     |
+| `Pagination.tsx`    | 100%       | 100%     | 66%       | 100%     |
+| `Header.tsx`        | 100%       | 100%     | 71%       | 100%     |
+| `TimeEntryForm.tsx` | 100%       | 90%      | 100%      | 100%     |
+| `TreeNode.tsx`      | 98%        | 94%      | 100%      | 98%      |
+| **Overall**         | **~75%**   | **~94%** | **~85%**  | **~75%** |
+
+**Target:** 50%+ statement coverage ✓
 
 ## Architecture & Data Flow
 

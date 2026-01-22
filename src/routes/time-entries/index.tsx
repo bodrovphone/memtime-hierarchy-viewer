@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import { getTimeEntries } from '@/api/memtime'
 import { Pagination } from '@/components/Pagination'
+import { formatDateTime } from '@/utils/date'
 import type { TimeEntry } from '@/types/memtime'
 
 const ITEMS_PER_PAGE = 10
@@ -38,18 +39,6 @@ export const Route = createFileRoute('/time-entries/')({
   errorComponent: ErrorState,
   component: TimeEntriesPage,
 })
-
-function formatDateTime(isoString: string): string {
-  const date = new Date(isoString)
-  return date.toLocaleString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-    hour12: true,
-  })
-}
 
 function TimeEntriesPage() {
   const { page, success, entryId } = Route.useSearch()
