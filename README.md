@@ -42,14 +42,16 @@ Visit [http://localhost:3000](http://localhost:3000)
 
 ## Commands
 
-| Command          | Description              |
-| ---------------- | ------------------------ |
-| `npm run dev`    | Start development server |
-| `npm run build`  | Build for production     |
-| `npm run test`   | Run Vitest tests         |
-| `npm run lint`   | Run ESLint               |
-| `npm run format` | Run Prettier             |
-| `npm run check`  | Format + lint fix        |
+| Command                 | Description                    |
+| ----------------------- | ------------------------------ |
+| `npm run dev`           | Start development server       |
+| `npm run build`         | Build for production           |
+| `npm run test`          | Run Vitest tests               |
+| `npm run test:watch`    | Run tests in watch mode        |
+| `npm run test:coverage` | Run tests with coverage report |
+| `npm run lint`          | Run ESLint                     |
+| `npm run format`        | Run Prettier                   |
+| `npm run check`         | Format + lint fix              |
 
 ## Project Structure
 
@@ -58,10 +60,24 @@ src/
 ├── api/          # Server functions for Memtime API
 ├── components/   # Reusable UI components
 ├── routes/       # File-based routing (TanStack Router)
-└── types/        # TypeScript interfaces
+├── types/        # TypeScript interfaces
+├── utils/        # Utility functions (date formatting, etc.)
+└── test/         # Test setup and utilities
 ```
 
 Each folder contains a `readme-{folder}.md` with detailed documentation.
+
+## Testing
+
+The project uses Vitest with React Testing Library for unit tests. Tests are co-located with source files using the `*.test.tsx` pattern.
+
+```bash
+npm run test           # Run all tests
+npm run test:watch     # Run tests in watch mode
+npm run test:coverage  # Run tests with coverage report
+```
+
+**Coverage target:** 50%+ (currently ~75%)
 
 ## Architecture & Data Flow
 
