@@ -1,4 +1,14 @@
-Welcome to your new TanStack app! 
+# Memtime Hierarchy Viewer
+
+A time-tracking application built with TanStack Start that integrates with the Memtime API. View hierarchical organizational data (Clients → Projects → Tasks), browse time entries with pagination, and create/update time entries.
+
+## Documentation
+
+- [Product Requirements Document (PRD)](./docs/PRD.md)
+- [Design Reference](./docs/design-reference.md)
+- [Implementation Plan](./docs/implementation-plan.md)
+
+---
 
 # Getting Started
 
