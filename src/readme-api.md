@@ -2,6 +2,8 @@
 
 Server-side API client for Memtime integration using TanStack Start server functions.
 
+> **API Reference:** See [Memtime API V1 Documentation](../docs/api-v1-documentation.md) for complete endpoint details, data types, and examples.
+
 ## Files
 
 ### `memtime.ts`

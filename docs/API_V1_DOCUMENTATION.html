@@ -1,0 +1,569 @@
+
+<body>
+<h1 id="api-documentation">API Documentation</h1>
+<h2 id="overview">Overview</h2>
+<p>The API is a RESTful API that provides endpoints for querying
+clients, projects, tasks, and managing time entries. The API supports
+API Key (Bearer Token) based authentication.</p>
+<p><strong>Base URL:</strong>
+<code>https://interview-api.memtime-demo.deno.net/api/v1</code></p>
+<hr>
+<h2 id="authentication">Authentication</h2>
+<h3 id="bearer-token-api-key">Bearer Token (API Key)</h3>
+<p>All requests to <code>/api/v1</code> endpoints require a Bearer token
+in the <code>Authorization</code> header.</p>
+<pre><code>Authorization: Bearer &lt;API_KEY&gt;</code></pre>
+<h3 id="rate-limiting">Rate Limiting</h3>
+<ul>
+<li><strong>Window:</strong> 60 seconds (1 minute)</li>
+<li><strong>Limit:</strong> 15 requests per window</li>
+<li>Rate limit key is based on the API key provided</li>
+</ul>
+<h3 id="response-format">Response Format</h3>
+<p>All responses are returned as JSON with pretty-printing enabled.</p>
+<hr>
+<h2 id="data-types">Data Types</h2>
+<h3 id="client">Client</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb2-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb2-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb2-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb2-2" tabindex="-1"></a>  <span class="dt">"id"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb2-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb2-3" tabindex="-1"></a>  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Client Name"</span><span class="fu">,</span></span>
+<span id="cb2-4"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb2-4" tabindex="-1"></a>  <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"Client description"</span><span class="fu">,</span></span>
+<span id="cb2-5"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb2-5" tabindex="-1"></a>  <span class="dt">"status"</span><span class="fu">:</span> <span class="st">"active"</span><span class="fu">,</span></span>
+<span id="cb2-6"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb2-6" tabindex="-1"></a>  <span class="dt">"createdAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T10:30:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb2-7"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb2-7" tabindex="-1"></a>  <span class="dt">"updatedAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T10:30:00.000Z"</span></span>
+<span id="cb2-8"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb2-8" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<h3 id="project">Project</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb3-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb3-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb3-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb3-2" tabindex="-1"></a>  <span class="dt">"id"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb3-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb3-3" tabindex="-1"></a>  <span class="dt">"clientId"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb3-4"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb3-4" tabindex="-1"></a>  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Project Name"</span><span class="fu">,</span></span>
+<span id="cb3-5"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb3-5" tabindex="-1"></a>  <span class="dt">"status"</span><span class="fu">:</span> <span class="st">"active"</span><span class="fu">,</span></span>
+<span id="cb3-6"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb3-6" tabindex="-1"></a>  <span class="dt">"createdAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T10:30:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb3-7"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb3-7" tabindex="-1"></a>  <span class="dt">"updatedAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T10:30:00.000Z"</span></span>
+<span id="cb3-8"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb3-8" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<h3 id="task">Task</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb4-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb4-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb4-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb4-2" tabindex="-1"></a>  <span class="dt">"id"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb4-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb4-3" tabindex="-1"></a>  <span class="dt">"parent"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb4-4"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb4-4" tabindex="-1"></a>  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Task Name"</span><span class="fu">,</span></span>
+<span id="cb4-5"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb4-5" tabindex="-1"></a>  <span class="dt">"status"</span><span class="fu">:</span> <span class="st">"active"</span><span class="fu">,</span></span>
+<span id="cb4-6"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb4-6" tabindex="-1"></a>  <span class="dt">"createdAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T10:30:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb4-7"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb4-7" tabindex="-1"></a>  <span class="dt">"updatedAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T10:30:00.000Z"</span></span>
+<span id="cb4-8"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb4-8" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<h3 id="timeentry">TimeEntry</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb5-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb5-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb5-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb5-2" tabindex="-1"></a>  <span class="dt">"id"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb5-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb5-3" tabindex="-1"></a>  <span class="dt">"taskId"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb5-4"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb5-4" tabindex="-1"></a>  <span class="dt">"userId"</span><span class="fu">:</span> <span class="st">"&lt;API_KEY&gt;"</span><span class="fu">,</span></span>
+<span id="cb5-5"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb5-5" tabindex="-1"></a>  <span class="dt">"comment"</span><span class="fu">:</span> <span class="st">"Worked on feature development"</span><span class="fu">,</span></span>
+<span id="cb5-6"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb5-6" tabindex="-1"></a>  <span class="dt">"start"</span><span class="fu">:</span> <span class="st">"2024-01-15T09:00:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb5-7"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb5-7" tabindex="-1"></a>  <span class="dt">"end"</span><span class="fu">:</span> <span class="st">"2024-01-15T17:00:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb5-8"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb5-8" tabindex="-1"></a>  <span class="dt">"createdAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T17:05:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb5-9"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb5-9" tabindex="-1"></a>  <span class="dt">"updatedAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T17:05:00.000Z"</span></span>
+<span id="cb5-10"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb5-10" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<hr>
+<h2 id="pagination">Pagination</h2>
+<p>List endpoints support pagination with the following query
+parameters:</p>
+<table>
+<colgroup>
+<col style="width: 28%">
+<col style="width: 15%">
+<col style="width: 23%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>limit</code></td>
+<td>number</td>
+<td>10</td>
+<td>Maximum number of results to return</td>
+</tr>
+<tr>
+<td><code>offset</code></td>
+<td>number</td>
+<td>0</td>
+<td>Number of results to skip</td>
+</tr>
+<tr>
+<td><code>sortBy</code></td>
+<td>string</td>
+<td>-</td>
+<td>Field name to sort by (must be a valid field)</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>string</td>
+<td>asc</td>
+<td>Sort order: <code>asc</code> or <code>desc</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Example:</strong></p>
+<pre><code>GET /api/v1/clients?limit=20&amp;offset=0&amp;sortBy=name&amp;order=asc</code></pre>
+<hr>
+<h2 id="endpoints">Endpoints</h2>
+<h3 id="clients">Clients</h3>
+<h4 id="get-all-clients">Get All Clients</h4>
+<p>Retrieve a paginated list of all clients.</p>
+<pre><code>GET /api/v1/clients</code></pre>
+<p><strong>Query Parameters:</strong> - <code>limit</code> (optional):
+Number of results per page (default: 10) - <code>offset</code>
+(optional): Number of results to skip (default: 0) - <code>sortBy</code>
+(optional): Field to sort by - <code>order</code> (optional): Sort order
+<code>asc</code> or <code>desc</code> (default: <code>asc</code>)</p>
+<p><strong>Response:</strong> <code>200 OK</code></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb8-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb8-1" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb8-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb8-2" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb8-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb8-3" tabindex="-1"></a>    <span class="dt">"id"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb8-4"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb8-4" tabindex="-1"></a>    <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Acme Corp"</span><span class="fu">,</span></span>
+<span id="cb8-5"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb8-5" tabindex="-1"></a>    <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"Leading supplier"</span><span class="fu">,</span></span>
+<span id="cb8-6"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb8-6" tabindex="-1"></a>    <span class="dt">"status"</span><span class="fu">:</span> <span class="st">"active"</span><span class="fu">,</span></span>
+<span id="cb8-7"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb8-7" tabindex="-1"></a>    <span class="dt">"createdAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T10:30:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb8-8"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb8-8" tabindex="-1"></a>    <span class="dt">"updatedAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T10:30:00.000Z"</span></span>
+<span id="cb8-9"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb8-9" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb8-10"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb8-10" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
+<p><strong>Example:</strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb9-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-H</span> <span class="st">"Authorization: Bearer &lt;API_KEY&gt;"</span> <span class="dt">\</span></span>
+<span id="cb9-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb9-2" tabindex="-1"></a>  https://api.example.com/api/v1/clients<span class="pp">?</span>limit=10<span class="kw">&amp;</span><span class="va">offset</span><span class="op">=</span>0</span></code></pre></div>
+<hr>
+<h4 id="get-client-by-id">Get Client by ID</h4>
+<p>Retrieve a specific client by ID.</p>
+<pre><code>GET /api/v1/clients/:id</code></pre>
+<p><strong>Path Parameters:</strong> - <code>id</code> (required):
+Client ID</p>
+<p><strong>Response:</strong> <code>200 OK</code></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb11-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb11-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb11-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb11-2" tabindex="-1"></a>  <span class="dt">"id"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb11-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb11-3" tabindex="-1"></a>  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Acme Corp"</span><span class="fu">,</span></span>
+<span id="cb11-4"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb11-4" tabindex="-1"></a>  <span class="dt">"description"</span><span class="fu">:</span> <span class="st">"Leading supplier"</span><span class="fu">,</span></span>
+<span id="cb11-5"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb11-5" tabindex="-1"></a>  <span class="dt">"status"</span><span class="fu">:</span> <span class="st">"active"</span><span class="fu">,</span></span>
+<span id="cb11-6"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb11-6" tabindex="-1"></a>  <span class="dt">"createdAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T10:30:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb11-7"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb11-7" tabindex="-1"></a>  <span class="dt">"updatedAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T10:30:00.000Z"</span></span>
+<span id="cb11-8"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb11-8" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Error Responses:</strong> - <code>404 Not Found</code> -
+Client not found</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb12-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb12-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb12-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb12-2" tabindex="-1"></a>  <span class="dt">"error"</span><span class="fu">:</span> <span class="st">"Client not found"</span></span>
+<span id="cb12-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb12-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Example:</strong></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb13-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-H</span> <span class="st">"Authorization: Bearer &lt;API_KEY&gt;"</span> <span class="dt">\</span></span>
+<span id="cb13-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb13-2" tabindex="-1"></a>  https://api.example.com/api/v1/clients/1</span></code></pre></div>
+<hr>
+<h3 id="projects">Projects</h3>
+<h4 id="get-projects-of-a-client">Get Projects of a Client</h4>
+<p>Retrieve all projects belonging to a specific client.</p>
+<pre><code>GET /api/v1/clients/:id/projects</code></pre>
+<p><strong>Path Parameters:</strong> - <code>id</code> (required):
+Client ID</p>
+<p><strong>Query Parameters:</strong> - <code>limit</code> (optional):
+Number of results per page (default: 10) - <code>offset</code>
+(optional): Number of results to skip (default: 0) - <code>sortBy</code>
+(optional): Field to sort by - <code>order</code> (optional): Sort order
+<code>asc</code> or <code>desc</code> (default: <code>asc</code>)</p>
+<p><strong>Response:</strong> <code>200 OK</code></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb15-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb15-1" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb15-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb15-2" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb15-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb15-3" tabindex="-1"></a>    <span class="dt">"id"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb15-4"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb15-4" tabindex="-1"></a>    <span class="dt">"clientId"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb15-5"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb15-5" tabindex="-1"></a>    <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Website Redesign"</span><span class="fu">,</span></span>
+<span id="cb15-6"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb15-6" tabindex="-1"></a>    <span class="dt">"status"</span><span class="fu">:</span> <span class="st">"active"</span><span class="fu">,</span></span>
+<span id="cb15-7"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb15-7" tabindex="-1"></a>    <span class="dt">"createdAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T10:30:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb15-8"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb15-8" tabindex="-1"></a>    <span class="dt">"updatedAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T10:30:00.000Z"</span></span>
+<span id="cb15-9"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb15-9" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb15-10"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb15-10" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
+<p><strong>Example:</strong></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb16-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-H</span> <span class="st">"Authorization: Bearer &lt;API_KEY&gt;"</span> <span class="dt">\</span></span>
+<span id="cb16-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb16-2" tabindex="-1"></a>  https://api.example.com/api/v1/clients/1/projects</span></code></pre></div>
+<hr>
+<h4 id="get-project-by-id">Get Project by ID</h4>
+<p>Retrieve a specific project by ID.</p>
+<pre><code>GET /api/v1/projects/:id</code></pre>
+<p><strong>Path Parameters:</strong> - <code>id</code> (required):
+Project ID</p>
+<p><strong>Response:</strong> <code>200 OK</code></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb18-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb18-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb18-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb18-2" tabindex="-1"></a>  <span class="dt">"id"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb18-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb18-3" tabindex="-1"></a>  <span class="dt">"clientId"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb18-4"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb18-4" tabindex="-1"></a>  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Website Redesign"</span><span class="fu">,</span></span>
+<span id="cb18-5"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb18-5" tabindex="-1"></a>  <span class="dt">"status"</span><span class="fu">:</span> <span class="st">"active"</span><span class="fu">,</span></span>
+<span id="cb18-6"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb18-6" tabindex="-1"></a>  <span class="dt">"createdAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T10:30:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb18-7"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb18-7" tabindex="-1"></a>  <span class="dt">"updatedAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T10:30:00.000Z"</span></span>
+<span id="cb18-8"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb18-8" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Error Responses:</strong> - <code>404 Not Found</code> -
+Project not found</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb19-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb19-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb19-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb19-2" tabindex="-1"></a>  <span class="dt">"error"</span><span class="fu">:</span> <span class="st">"Project not found"</span></span>
+<span id="cb19-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb19-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Example:</strong></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb20-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-H</span> <span class="st">"Authorization: Bearer &lt;API_KEY&gt;"</span> <span class="dt">\</span></span>
+<span id="cb20-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb20-2" tabindex="-1"></a>  https://api.example.com/api/v1/projects/1</span></code></pre></div>
+<hr>
+<h3 id="tasks">Tasks</h3>
+<h4 id="get-tasks-of-a-project">Get Tasks of a Project</h4>
+<p>Retrieve all tasks belonging to a specific project.</p>
+<pre><code>GET /api/v1/projects/:id/tasks</code></pre>
+<p><strong>Path Parameters:</strong> - <code>id</code> (required):
+Project ID</p>
+<p><strong>Query Parameters:</strong> - <code>limit</code> (optional):
+Number of results per page (default: 10) - <code>offset</code>
+(optional): Number of results to skip (default: 0) - <code>sortBy</code>
+(optional): Field to sort by - <code>order</code> (optional): Sort order
+<code>asc</code> or <code>desc</code> (default: <code>asc</code>)</p>
+<p><strong>Response:</strong> <code>200 OK</code></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb22-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb22-1" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb22-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb22-2" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb22-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb22-3" tabindex="-1"></a>    <span class="dt">"id"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb22-4"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb22-4" tabindex="-1"></a>    <span class="dt">"parent"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb22-5"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb22-5" tabindex="-1"></a>    <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Design mockups"</span><span class="fu">,</span></span>
+<span id="cb22-6"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb22-6" tabindex="-1"></a>    <span class="dt">"status"</span><span class="fu">:</span> <span class="st">"active"</span><span class="fu">,</span></span>
+<span id="cb22-7"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb22-7" tabindex="-1"></a>    <span class="dt">"createdAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T10:30:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb22-8"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb22-8" tabindex="-1"></a>    <span class="dt">"updatedAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T10:30:00.000Z"</span></span>
+<span id="cb22-9"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb22-9" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb22-10"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb22-10" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
+<p><strong>Example:</strong></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb23-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb23-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-H</span> <span class="st">"Authorization: Bearer &lt;API_KEY&gt;"</span> <span class="dt">\</span></span>
+<span id="cb23-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb23-2" tabindex="-1"></a>  https://api.example.com/api/v1/projects/1/tasks</span></code></pre></div>
+<hr>
+<h4 id="get-task-by-id">Get Task by ID</h4>
+<p>Retrieve a specific task by ID.</p>
+<pre><code>GET /api/v1/tasks/:id</code></pre>
+<p><strong>Path Parameters:</strong> - <code>id</code> (required): Task
+ID</p>
+<p><strong>Response:</strong> <code>200 OK</code></p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb25-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb25-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb25-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb25-2" tabindex="-1"></a>  <span class="dt">"id"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb25-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb25-3" tabindex="-1"></a>  <span class="dt">"parent"</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span></span>
+<span id="cb25-4"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb25-4" tabindex="-1"></a>  <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Design mockups"</span><span class="fu">,</span></span>
+<span id="cb25-5"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb25-5" tabindex="-1"></a>  <span class="dt">"status"</span><span class="fu">:</span> <span class="st">"active"</span><span class="fu">,</span></span>
+<span id="cb25-6"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb25-6" tabindex="-1"></a>  <span class="dt">"createdAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T10:30:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb25-7"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb25-7" tabindex="-1"></a>  <span class="dt">"updatedAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T10:30:00.000Z"</span></span>
+<span id="cb25-8"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb25-8" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Error Responses:</strong> - <code>404 Not Found</code> - Task
+not found</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb26-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb26-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb26-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb26-2" tabindex="-1"></a>  <span class="dt">"error"</span><span class="fu">:</span> <span class="st">"Task not found"</span></span>
+<span id="cb26-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb26-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Example:</strong></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb27-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-H</span> <span class="st">"Authorization: Bearer &lt;API_KEY&gt;"</span> <span class="dt">\</span></span>
+<span id="cb27-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb27-2" tabindex="-1"></a>  https://api.example.com/api/v1/tasks/1</span></code></pre></div>
+<hr>
+<h3 id="time-entries">Time Entries</h3>
+<h4 id="get-my-time-entries">Get My Time Entries</h4>
+<p>Retrieve all time entries for the authenticated user.</p>
+<pre><code>GET /api/v1/time-entries</code></pre>
+<p><strong>Query Parameters:</strong> - <code>limit</code> (optional):
+Number of results per page (default: 10) - <code>offset</code>
+(optional): Number of results to skip (default: 0) - <code>sortBy</code>
+(optional): Field to sort by - <code>order</code> (optional): Sort order
+<code>asc</code> or <code>desc</code> (default: <code>asc</code>)</p>
+<p><strong>Response:</strong> <code>200 OK</code></p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb29-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb29-1" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb29-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb29-2" tabindex="-1"></a>  <span class="fu">{</span></span>
+<span id="cb29-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb29-3" tabindex="-1"></a>    <span class="dt">"id"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb29-4"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb29-4" tabindex="-1"></a>    <span class="dt">"taskId"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb29-5"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb29-5" tabindex="-1"></a>    <span class="dt">"userId"</span><span class="fu">:</span> <span class="st">"&lt;API_KEY&gt;"</span><span class="fu">,</span></span>
+<span id="cb29-6"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb29-6" tabindex="-1"></a>    <span class="dt">"comment"</span><span class="fu">:</span> <span class="st">"Worked on feature development"</span><span class="fu">,</span></span>
+<span id="cb29-7"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb29-7" tabindex="-1"></a>    <span class="dt">"start"</span><span class="fu">:</span> <span class="st">"2024-01-15T09:00:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb29-8"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb29-8" tabindex="-1"></a>    <span class="dt">"end"</span><span class="fu">:</span> <span class="st">"2024-01-15T17:00:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb29-9"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb29-9" tabindex="-1"></a>    <span class="dt">"createdAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T17:05:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb29-10"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb29-10" tabindex="-1"></a>    <span class="dt">"updatedAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T17:05:00.000Z"</span></span>
+<span id="cb29-11"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb29-11" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb29-12"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb29-12" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
+<p><strong>Error Responses:</strong> - <code>404 Not Found</code> - User
+not found/authenticated</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb30-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb30-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb30-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb30-2" tabindex="-1"></a>  <span class="dt">"error"</span><span class="fu">:</span> <span class="st">"Unknown user"</span></span>
+<span id="cb30-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb30-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Example:</strong></p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb31-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb31-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-H</span> <span class="st">"Authorization: Bearer &lt;API_KEY&gt;"</span> <span class="dt">\</span></span>
+<span id="cb31-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb31-2" tabindex="-1"></a>  https://api.example.com/api/v1/time-entries</span></code></pre></div>
+<hr>
+<h4 id="get-time-entry-by-id">Get Time Entry by ID</h4>
+<p>Retrieve a specific time entry by ID. Only returns entries belonging
+to the authenticated user.</p>
+<pre><code>GET /api/v1/time-entries/:id</code></pre>
+<p><strong>Path Parameters:</strong> - <code>id</code> (required): Time
+Entry ID</p>
+<p><strong>Response:</strong> <code>200 OK</code></p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb33-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb33-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb33-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb33-2" tabindex="-1"></a>  <span class="dt">"id"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb33-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb33-3" tabindex="-1"></a>  <span class="dt">"taskId"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb33-4"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb33-4" tabindex="-1"></a>  <span class="dt">"userId"</span><span class="fu">:</span> <span class="st">"&lt;API_KEY&gt;"</span><span class="fu">,</span></span>
+<span id="cb33-5"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb33-5" tabindex="-1"></a>  <span class="dt">"comment"</span><span class="fu">:</span> <span class="st">"Worked on feature development"</span><span class="fu">,</span></span>
+<span id="cb33-6"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb33-6" tabindex="-1"></a>  <span class="dt">"start"</span><span class="fu">:</span> <span class="st">"2024-01-15T09:00:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb33-7"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb33-7" tabindex="-1"></a>  <span class="dt">"end"</span><span class="fu">:</span> <span class="st">"2024-01-15T17:00:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb33-8"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb33-8" tabindex="-1"></a>  <span class="dt">"createdAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T17:05:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb33-9"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb33-9" tabindex="-1"></a>  <span class="dt">"updatedAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T17:05:00.000Z"</span></span>
+<span id="cb33-10"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb33-10" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Error Responses:</strong> - <code>404 Not Found</code> - Time
+entry not found or does not belong to user</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb34-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb34-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb34-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb34-2" tabindex="-1"></a>  <span class="dt">"error"</span><span class="fu">:</span> <span class="st">"Time entry not found"</span></span>
+<span id="cb34-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb34-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Example:</strong></p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb35-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb35-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-H</span> <span class="st">"Authorization: Bearer &lt;API_KEY&gt;"</span> <span class="dt">\</span></span>
+<span id="cb35-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb35-2" tabindex="-1"></a>  https://api.example.com/api/v1/time-entries/1</span></code></pre></div>
+<hr>
+<h4 id="create-time-entry">Create Time Entry</h4>
+<p>Create a new time entry for the authenticated user.</p>
+<pre><code>POST /api/v1/time-entries</code></pre>
+<p><strong>Request Body:</strong></p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb37-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb37-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb37-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb37-2" tabindex="-1"></a>  <span class="dt">"taskId"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb37-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb37-3" tabindex="-1"></a>  <span class="dt">"comment"</span><span class="fu">:</span> <span class="st">"Worked on feature development"</span><span class="fu">,</span></span>
+<span id="cb37-4"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb37-4" tabindex="-1"></a>  <span class="dt">"start"</span><span class="fu">:</span> <span class="st">"2024-01-15T09:00:00Z"</span><span class="fu">,</span></span>
+<span id="cb37-5"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb37-5" tabindex="-1"></a>  <span class="dt">"end"</span><span class="fu">:</span> <span class="st">"2024-01-15T17:00:00Z"</span></span>
+<span id="cb37-6"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb37-6" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Body Parameters:</strong> - <code>taskId</code> (required):
+Task ID associated with the time entry - <code>comment</code>
+(required): Comment/description for the time entry - <code>start</code>
+(required): Start time (ISO 8601 format) - <code>end</code> (required):
+End time (ISO 8601 format)</p>
+<p><strong>Response:</strong> <code>201 Created</code></p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb38-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb38-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb38-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb38-2" tabindex="-1"></a>  <span class="dt">"id"</span><span class="fu">:</span> <span class="dv">2</span><span class="fu">,</span></span>
+<span id="cb38-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb38-3" tabindex="-1"></a>  <span class="dt">"taskId"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb38-4"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb38-4" tabindex="-1"></a>  <span class="dt">"userId"</span><span class="fu">:</span> <span class="st">"&lt;API_KEY&gt;"</span><span class="fu">,</span></span>
+<span id="cb38-5"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb38-5" tabindex="-1"></a>  <span class="dt">"comment"</span><span class="fu">:</span> <span class="st">"Worked on feature development"</span><span class="fu">,</span></span>
+<span id="cb38-6"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb38-6" tabindex="-1"></a>  <span class="dt">"start"</span><span class="fu">:</span> <span class="st">"2024-01-15T09:00:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb38-7"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb38-7" tabindex="-1"></a>  <span class="dt">"end"</span><span class="fu">:</span> <span class="st">"2024-01-15T17:00:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb38-8"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb38-8" tabindex="-1"></a>  <span class="dt">"createdAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T17:15:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb38-9"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb38-9" tabindex="-1"></a>  <span class="dt">"updatedAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T17:15:00.000Z"</span></span>
+<span id="cb38-10"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb38-10" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Error Responses:</strong> - <code>400 Bad Request</code> -
+Invalid JSON body or missing required fields</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb39-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb39-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb39-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb39-2" tabindex="-1"></a>  <span class="dt">"error"</span><span class="fu">:</span> <span class="st">"Invalid JSON body"</span></span>
+<span id="cb39-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb39-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Example:</strong></p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb40-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb40-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-X</span> POST <span class="dt">\</span></span>
+<span id="cb40-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb40-2" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">"Authorization: Bearer &lt;API_KEY&gt;"</span> <span class="dt">\</span></span>
+<span id="cb40-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb40-3" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">"Content-Type: application/json"</span> <span class="dt">\</span></span>
+<span id="cb40-4"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb40-4" tabindex="-1"></a>  <span class="at">-d</span> <span class="st">'{</span></span>
+<span id="cb40-5"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb40-5" tabindex="-1"></a><span class="st">    "taskId": 1,</span></span>
+<span id="cb40-6"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb40-6" tabindex="-1"></a><span class="st">    "comment": "Worked on feature development",</span></span>
+<span id="cb40-7"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb40-7" tabindex="-1"></a><span class="st">    "start": "2024-01-15T09:00:00Z",</span></span>
+<span id="cb40-8"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb40-8" tabindex="-1"></a><span class="st">    "end": "2024-01-15T17:00:00Z"</span></span>
+<span id="cb40-9"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb40-9" tabindex="-1"></a><span class="st">  }'</span> <span class="dt">\</span></span>
+<span id="cb40-10"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb40-10" tabindex="-1"></a>  https://api.example.com/api/v1/time-entries</span></code></pre></div>
+<hr>
+<h4 id="update-time-entry">Update Time Entry</h4>
+<p>Update an existing time entry.</p>
+<pre><code>PUT /api/v1/time-entries/:id</code></pre>
+<p><strong>Path Parameters:</strong> - <code>id</code> (required): Time
+Entry ID</p>
+<p><strong>Request Body:</strong></p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb42-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb42-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb42-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb42-2" tabindex="-1"></a>  <span class="dt">"taskId"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb42-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb42-3" tabindex="-1"></a>  <span class="dt">"comment"</span><span class="fu">:</span> <span class="st">"Updated comment"</span><span class="fu">,</span></span>
+<span id="cb42-4"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb42-4" tabindex="-1"></a>  <span class="dt">"start"</span><span class="fu">:</span> <span class="st">"2024-01-15T09:30:00Z"</span><span class="fu">,</span></span>
+<span id="cb42-5"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb42-5" tabindex="-1"></a>  <span class="dt">"end"</span><span class="fu">:</span> <span class="st">"2024-01-15T17:30:00Z"</span></span>
+<span id="cb42-6"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb42-6" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Body Parameters:</strong> - <code>taskId</code> (required):
+Task ID associated with the time entry - <code>comment</code>
+(required): Comment/description for the time entry - <code>start</code>
+(required): Start time (ISO 8601 format) - <code>end</code> (required):
+End time (ISO 8601 format)</p>
+<p><strong>Response:</strong> <code>200 OK</code></p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb43-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb43-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb43-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb43-2" tabindex="-1"></a>  <span class="dt">"id"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb43-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb43-3" tabindex="-1"></a>  <span class="dt">"taskId"</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span></span>
+<span id="cb43-4"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb43-4" tabindex="-1"></a>  <span class="dt">"userId"</span><span class="fu">:</span> <span class="st">"&lt;API_KEY&gt;"</span><span class="fu">,</span></span>
+<span id="cb43-5"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb43-5" tabindex="-1"></a>  <span class="dt">"comment"</span><span class="fu">:</span> <span class="st">"Updated comment"</span><span class="fu">,</span></span>
+<span id="cb43-6"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb43-6" tabindex="-1"></a>  <span class="dt">"start"</span><span class="fu">:</span> <span class="st">"2024-01-15T09:30:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb43-7"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb43-7" tabindex="-1"></a>  <span class="dt">"end"</span><span class="fu">:</span> <span class="st">"2024-01-15T17:30:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb43-8"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb43-8" tabindex="-1"></a>  <span class="dt">"createdAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T17:05:00.000Z"</span><span class="fu">,</span></span>
+<span id="cb43-9"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb43-9" tabindex="-1"></a>  <span class="dt">"updatedAt"</span><span class="fu">:</span> <span class="st">"2024-01-15T17:20:00.000Z"</span></span>
+<span id="cb43-10"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb43-10" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Error Responses:</strong> - <code>400 Bad Request</code> -
+Time entry ID is required for update</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb44-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb44-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb44-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb44-2" tabindex="-1"></a>  <span class="dt">"error"</span><span class="fu">:</span> <span class="st">"Time entry ID is required for update"</span></span>
+<span id="cb44-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb44-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<ul>
+<li><code>404 Not Found</code> - Time entry not found or does not belong
+to user</li>
+</ul>
+<div class="sourceCode" id="cb45"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb45-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb45-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb45-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb45-2" tabindex="-1"></a>  <span class="dt">"error"</span><span class="fu">:</span> <span class="st">"Time entry #1 not found"</span></span>
+<span id="cb45-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb45-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<ul>
+<li><code>400 Bad Request</code> - Invalid JSON body</li>
+</ul>
+<div class="sourceCode" id="cb46"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb46-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb46-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb46-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb46-2" tabindex="-1"></a>  <span class="dt">"error"</span><span class="fu">:</span> <span class="st">"Invalid JSON body"</span></span>
+<span id="cb46-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb46-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Example:</strong></p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb47-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb47-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-X</span> PUT <span class="dt">\</span></span>
+<span id="cb47-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb47-2" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">"Authorization: Bearer &lt;API_KEY&gt;"</span> <span class="dt">\</span></span>
+<span id="cb47-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb47-3" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">"Content-Type: application/json"</span> <span class="dt">\</span></span>
+<span id="cb47-4"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb47-4" tabindex="-1"></a>  <span class="at">-d</span> <span class="st">'{</span></span>
+<span id="cb47-5"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb47-5" tabindex="-1"></a><span class="st">    "taskId": 1,</span></span>
+<span id="cb47-6"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb47-6" tabindex="-1"></a><span class="st">    "comment": "Updated comment",</span></span>
+<span id="cb47-7"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb47-7" tabindex="-1"></a><span class="st">    "start": "2024-01-15T09:30:00Z",</span></span>
+<span id="cb47-8"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb47-8" tabindex="-1"></a><span class="st">    "end": "2024-01-15T17:30:00Z"</span></span>
+<span id="cb47-9"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb47-9" tabindex="-1"></a><span class="st">  }'</span> <span class="dt">\</span></span>
+<span id="cb47-10"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb47-10" tabindex="-1"></a>  https://api.example.com/api/v1/time-entries/1</span></code></pre></div>
+<hr>
+<h4 id="delete-time-entry">Delete Time Entry</h4>
+<p>Delete an existing time entry.</p>
+<pre><code>DELETE /api/v1/time-entries/:id</code></pre>
+<p><strong>Path Parameters:</strong> - <code>id</code> (required): Time
+Entry ID</p>
+<p><strong>Response:</strong> <code>200 OK</code></p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb49-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb49-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb49-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb49-2" tabindex="-1"></a>  <span class="dt">"message"</span><span class="fu">:</span> <span class="st">"Time entry deleted successfully"</span></span>
+<span id="cb49-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb49-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Error Responses:</strong> - <code>404 Not Found</code> - Time
+entry not found or does not belong to user</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb50-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb50-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb50-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb50-2" tabindex="-1"></a>  <span class="dt">"error"</span><span class="fu">:</span> <span class="st">"Time entry not found"</span></span>
+<span id="cb50-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb50-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Example:</strong></p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb51-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb51-1" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-X</span> DELETE <span class="dt">\</span></span>
+<span id="cb51-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb51-2" tabindex="-1"></a>  <span class="at">-H</span> <span class="st">"Authorization: Bearer &lt;API_KEY&gt;"</span> <span class="dt">\</span></span>
+<span id="cb51-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb51-3" tabindex="-1"></a>  https://api.example.com/api/v1/time-entries/1</span></code></pre></div>
+<hr>
+<h2 id="error-handling">Error Handling</h2>
+<p>The API returns standard HTTP status codes along with JSON error
+messages:</p>
+<table>
+<thead>
+<tr>
+<th>Status Code</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>200</code></td>
+<td>OK - Request successful</td>
+</tr>
+<tr>
+<td><code>201</code></td>
+<td>Created - Resource created successfully</td>
+</tr>
+<tr>
+<td><code>400</code></td>
+<td>Bad Request - Invalid request parameters or body</td>
+</tr>
+<tr>
+<td><code>404</code></td>
+<td>Not Found - Resource not found</td>
+</tr>
+<tr>
+<td><code>429</code></td>
+<td>Too Many Requests - Rate limit exceeded</td>
+</tr>
+<tr>
+<td><code>500</code></td>
+<td>Internal Server Error - Server error</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Error Response Format:</strong></p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb52-1"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb52-1" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb52-2"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb52-2" tabindex="-1"></a>  <span class="dt">"error"</span><span class="fu">:</span> <span class="st">"Error description"</span></span>
+<span id="cb52-3"><a aria-hidden="true" href="https://lustrous-beijinho-54fcf1.netlify.app/api_v1_documentation#cb52-3" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<hr>
+<h2 id="rate-limiting-1">Rate Limiting</h2>
+<p>The API implements rate limiting to prevent abuse:</p>
+<ul>
+<li><strong>Window:</strong> 60 seconds</li>
+<li><strong>Limit:</strong> 15 requests per window</li>
+<li><strong>Key:</strong> Based on the API key used</li>
+</ul>
+<p>When the rate limit is exceeded, the API returns a
+<code>429 Too Many Requests</code> status code.</p>
+<hr>
+<h2 id="request-headers">Request Headers</h2>
+<p>All requests must include:</p>
+<pre><code>Authorization: Bearer &lt;API_KEY&gt;</code></pre>
+<p>Optional headers:</p>
+<pre><code>Content-Type: application/json  (for POST/PUT requests)</code></pre>
+<hr>
+<h2 id="summary-of-endpoints">Summary of Endpoints</h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Endpoint</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/clients</code></td>
+<td>Get all clients</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/clients/:id</code></td>
+<td>Get a specific client</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/clients/:id/projects</code></td>
+<td>Get projects for a client</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/projects/:id</code></td>
+<td>Get a specific project</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/projects/:id/tasks</code></td>
+<td>Get tasks for a project</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/tasks/:id</code></td>
+<td>Get a specific task</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/time-entries</code></td>
+<td>Get user’s time entries</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/time-entries/:id</code></td>
+<td>Get a specific time entry</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/time-entries</code></td>
+<td>Create a new time entry</td>
+</tr>
+<tr>
+<td><code>PUT</code></td>
+<td><code>/time-entries/:id</code></td>
+<td>Update a time entry</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><code>/time-entries/:id</code></td>
+<td>Delete a time entry</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="health-check">Health Check</h2>
+<p>To verify the API is running:</p>
+<pre><code>GET /health</code></pre>
+<p><strong>Response:</strong> <code>200 OK</code></p>
+<pre><code>I'm alive!</code></pre>
+
+
+</body></html>

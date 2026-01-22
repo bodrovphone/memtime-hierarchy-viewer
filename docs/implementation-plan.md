@@ -13,6 +13,19 @@ Build a time-tracking application with three main features using the Memtime API
 
 ---
 
+## Progress Tracker
+
+| Phase | Status | Notes |
+|-------|--------|-------|
+| 1. Setup | ✅ Complete | Types, API client, environment |
+| 2. Task 1: Hierarchy | 🔄 In Progress | Components created, debugging API response format |
+| 3. Task 2: Time Entries | ⬜ Not Started | |
+| 4. Task 3: Forms | ⬜ Not Started | |
+| 5. Polish | ⬜ Not Started | |
+| 6. Cleanup | ⬜ Not Started | |
+
+---
+
 ## Architecture Decisions
 
 ### Data Fetching Strategy
@@ -49,33 +62,64 @@ src/
 
 ---
 
-## Task 1: Hierarchical Data Display
+## Phase 1: Setup ✅ COMPLETE
 
-### Implementation
-1. **Create `src/api/memtime.ts`** - API client with server functions:
-   - `getClients(limit, offset)` → GET `/clients`
-   - `getProjects(clientId, limit, offset)` → GET `/clients/:id/projects`
-   - `getTasks(projectId, limit, offset)` → GET `/projects/:id/tasks`
+### Completed Items
+- [x] **`src/types/memtime.ts`** - TypeScript interfaces for all API entities
+- [x] **`src/api/memtime.ts`** - Server functions for all API endpoints
+- [x] **`.env`** - API key configuration
+- [x] **`.env.example`** - Template for developers
+- [x] **`src/readme-api.md`** - API folder documentation
+- [x] **`src/readme-types.md`** - Types folder documentation
+- [x] **`docs/api-v1-documentation.md`** - Full API reference in markdown
 
-2. **Create `src/types/memtime.ts`** - Type definitions:
-   ```typescript
-   interface Client { id: string; name: string; /* ... */ }
-   interface Project { id: string; name: string; clientId: string; /* ... */ }
-   interface Task { id: string; name: string; projectId: string; /* ... */ }
-   interface PaginatedResponse<T> { data: T[]; total: number; limit: number; offset: number; }
-   ```
+### Key Discoveries
+- API returns **plain arrays**, not paginated wrapper objects
+- IDs are **numbers**, not strings
+- Task uses `parent` field (not `projectId`) for hierarchy
+- TimeEntry includes `userId` field
 
-3. **Create `src/components/TreeNode.tsx`**:
-   - Expandable/collapsible node (use ChevronRight/ChevronDown pattern from Header)
-   - Lazy-load children on expand (avoid rate limiting)
-   - Show loading state during fetch
-   - "Load more" button for pagination within each level
+---
 
-4. **Create `src/routes/hierarchy.tsx`**:
-   - Initial load: fetch first page of clients
-   - Tree structure with indentation
-   - Each node: Client → Projects → Tasks
-   - Pagination controls at each level
+## Phase 2: Task 1 - Hierarchical Data Display 🔄 IN PROGRESS
+
+### Completed Items
+- [x] **`src/api/memtime.ts`** - API client with server functions:
+  - `getClients(limit, offset)` → GET `/clients`
+  - `getProjects(clientId, limit, offset)` → GET `/clients/:id/projects`
+  - `getTasks(projectId, limit, offset)` → GET `/projects/:id/tasks`
+
+- [x] **`src/types/memtime.ts`** - Type definitions updated to match actual API:
+  ```typescript
+  interface Client { id: number; name: string; description: string; status: string; ... }
+  interface Project { id: number; clientId: number; name: string; status: string; ... }
+  interface Task { id: number; parent: number; name: string; status: string; ... }
+  ```
+
+- [x] **`src/components/TreeNode.tsx`**:
+  - Expandable/collapsible node with chevron icons
+  - Lazy-load children on expand
+  - Loading state during fetch
+  - "Load more" button for pagination
+  - Type-specific icons (Building, Folder, CheckSquare)
+
+- [x] **`src/routes/hierarchy.tsx`**:
+  - Initial load: fetch first page of clients
+  - Tree structure with indentation
+  - State management for expanded nodes
+  - Error handling with alert banner
+
+- [x] **`src/components/Header.tsx`** - Updated with:
+  - New navigation links (Home, Hierarchy, Time Entries)
+  - Desktop horizontal nav
+  - Mobile sidebar
+  - Memtime branding
+
+### Remaining Items
+- [ ] Verify hierarchy page loads correctly
+- [ ] Test expand/collapse functionality
+- [ ] Test "load more" pagination
+- [ ] Remove debug logging from API
 
 ### UI Design
 - Dark theme matching existing app
@@ -85,10 +129,10 @@ src/
 
 ---
 
-## Task 2: Time Entries List
+## Phase 3: Task 2 - Time Entries List ⬜ NOT STARTED
 
 ### Implementation
-1. **Add to `src/api/memtime.ts`**:
+1. **Add to `src/api/memtime.ts`**: ✅ Already done
    - `getTimeEntries(limit, offset)` → GET `/time-entries`
 
 2. **Create `src/components/Pagination.tsx`**:
@@ -110,10 +154,10 @@ src/
 
 ---
 
-## Task 3: Time Entry Management
+## Phase 4: Task 3 - Time Entry Management ⬜ NOT STARTED
 
 ### Implementation
-1. **Add to `src/api/memtime.ts`**:
+1. **Add to `src/api/memtime.ts`**: ✅ Already done
    - `createTimeEntry(data)` → POST `/time-entries`
    - `updateTimeEntry(id, data)` → PUT `/time-entries/:id`
    - `getTimeEntry(id)` → GET `/time-entries/:id`
@@ -149,79 +193,88 @@ src/
 
 ---
 
+## Phase 5: Polish ⬜ NOT STARTED
+
+- [ ] Error handling improvements
+- [ ] Loading states/skeletons
+- [ ] Responsive design testing
+- [ ] Accessibility audit
+- [ ] Remove debug logging
+
+---
+
+## Phase 6: Cleanup ⬜ NOT STARTED
+
+### Files to Delete
+- [ ] `src/routes/demo/api.names.ts`
+- [ ] `src/routes/demo/start.api-request.tsx`
+- [ ] `src/routes/demo/start.server-funcs.tsx`
+- [ ] `src/routes/demo/start.ssr.data-only.tsx`
+- [ ] `src/routes/demo/start.ssr.full-ssr.tsx`
+- [ ] `src/routes/demo/start.ssr.index.tsx`
+- [ ] `src/routes/demo/start.ssr.spa-mode.tsx`
+- [ ] `src/data/demo.punk-songs.ts`
+- [ ] `src/routes/demo/` directory
+
+### Files to Update
+- [ ] `src/routes/index.tsx` - Update home page content
+
+---
+
 ## File Changes Summary
 
-### New Files
-- `src/api/memtime.ts` - API client
-- `src/types/memtime.ts` - TypeScript types
-- `src/components/TreeNode.tsx` - Tree node component
+### New Files Created ✅
+- `src/api/memtime.ts` - API client ✅
+- `src/types/memtime.ts` - TypeScript types ✅
+- `src/components/TreeNode.tsx` - Tree node component ✅
+- `src/routes/hierarchy.tsx` - Hierarchy page ✅
+- `docs/api-v1-documentation.md` - API reference ✅
+- `src/readme-api.md` - API folder docs ✅
+- `src/readme-types.md` - Types folder docs ✅
+- `.env` / `.env.example` - Environment config ✅
+
+### New Files Pending
 - `src/components/Pagination.tsx` - Pagination component
 - `src/components/TimeEntryForm.tsx` - Form component
-- `src/routes/hierarchy.tsx` - Hierarchy page
 - `src/routes/time-entries/index.tsx` - Time entries list
 - `src/routes/time-entries/new.tsx` - Create form
 - `src/routes/time-entries/$id.tsx` - Edit form
 
-### Modified Files
-- `src/components/Header.tsx` - Add navigation links
-- `src/routes/index.tsx` - Update home page content
-
-### Files to Delete (confirmed)
-- `src/routes/demo/api.names.ts`
-- `src/routes/demo/start.api-request.tsx`
-- `src/routes/demo/start.server-funcs.tsx`
-- `src/routes/demo/start.ssr.data-only.tsx`
-- `src/routes/demo/start.ssr.full-ssr.tsx`
-- `src/routes/demo/start.ssr.index.tsx`
-- `src/routes/demo/start.ssr.spa-mode.tsx`
-- `src/data/demo.punk-songs.ts`
-- `src/routes/demo/` directory
+### Modified Files ✅
+- `src/components/Header.tsx` - Navigation links ✅
 
 ---
 
-## Environment Setup
+## Environment Setup ✅ COMPLETE
 
-Create `.env` file (already gitignored):
+`.env` file created with:
 ```
 MEMTIME_API_KEY=t2On0w9hkjQNrfnKEaO7FhsVrfPLXZS2
 ```
-
-Access in server functions via `process.env.MEMTIME_API_KEY`
 
 ---
 
 ## Verification Plan
 
 1. **Hierarchy View**:
-   - Expand/collapse clients, projects, tasks
-   - Verify lazy loading works
-   - Test "load more" pagination at each level
-   - Check rate limiting doesn't break UX
+   - [ ] Expand/collapse clients, projects, tasks
+   - [ ] Verify lazy loading works
+   - [ ] Test "load more" pagination at each level
+   - [ ] Check rate limiting doesn't break UX
 
 2. **Time Entries Table**:
-   - Navigate between pages
-   - Verify URL updates with pagination params
-   - Check date formatting
+   - [ ] Navigate between pages
+   - [ ] Verify URL updates with pagination params
+   - [ ] Check date formatting
 
 3. **Create/Edit Form**:
-   - Create new entry → verify in list
-   - Edit existing entry → verify changes
-   - Test validation errors
-   - Test 404 handling for invalid IDs
+   - [ ] Create new entry → verify in list
+   - [ ] Edit existing entry → verify changes
+   - [ ] Test validation errors
+   - [ ] Test 404 handling for invalid IDs
 
 4. **Run commands**:
-   - `npm run dev` - Development server
-   - `npm run build` - Production build
-   - `npm run test` - Run tests (add tests for components)
-   - `npm run check` - Lint and format
-
----
-
-## Implementation Order
-
-1. Setup: Types, API client, environment
-2. Task 1: Hierarchy (most complex, establishes patterns)
-3. Task 2: Time entries table (uses pagination pattern)
-4. Task 3: Forms (uses API client, links to table)
-5. Polish: Error handling, loading states, responsiveness
-6. Cleanup: Remove demo files, update home page
+   - [ ] `npm run dev` - Development server
+   - [ ] `npm run build` - Production build
+   - [ ] `npm run test` - Run tests (add tests for components)
+   - [ ] `npm run check` - Lint and format

@@ -17,6 +17,7 @@ const API_BASE_URL = 'https://interview-api.memtime-demo.deno.net/api/v1'
 
 function getApiKey(): string {
   const apiKey = process.env.MEMTIME_API_KEY
+  console.log('[API] API Key present:', !!apiKey)
   if (!apiKey) {
     throw new Error('MEMTIME_API_KEY environment variable is not set')
   }
@@ -48,10 +49,13 @@ async function handleResponse<T>(response: Response): Promise<T> {
       }
     }
 
+    console.error('[API] Error:', message)
     throw new Error(message)
   }
 
-  return response.json()
+  const json = await response.json()
+  console.log('[API] Raw response:', JSON.stringify(json, null, 2))
+  return json as T
 }
 
 // =============================================================================
@@ -61,14 +65,29 @@ async function handleResponse<T>(response: Response): Promise<T> {
 export const getClients = createServerFn({ method: 'GET' })
   .inputValidator((data: { limit?: number; offset?: number }) => data)
   .handler(async ({ data }): Promise<PaginatedResponse<Client>> => {
+    console.log('[API] getClients called with:', data)
+
     const params = new URLSearchParams()
     if (data.limit) params.set('limit', data.limit.toString())
     if (data.offset) params.set('offset', data.offset.toString())
 
     const url = `${API_BASE_URL}/clients${params.toString() ? `?${params}` : ''}`
-    const response = await fetch(url, { headers: getHeaders() })
+    console.log('[API] Fetching:', url)
 
-    return handleResponse<PaginatedResponse<Client>>(response)
+    const response = await fetch(url, { headers: getHeaders() })
+    console.log('[API] Response status:', response.status)
+
+    // API returns plain array, wrap it in paginated response
+    const items = await handleResponse<Client[]>(response)
+    const result: PaginatedResponse<Client> = {
+      data: items,
+      total: items.length, // API doesn't provide total, use array length
+      limit: data.limit ?? items.length,
+      offset: data.offset ?? 0,
+    }
+    console.log('[API] Result:', { total: result.total, count: result.data?.length })
+
+    return result
   })
 
 // =============================================================================
@@ -76,7 +95,7 @@ export const getClients = createServerFn({ method: 'GET' })
 // =============================================================================
 
 export const getProjects = createServerFn({ method: 'GET' })
-  .inputValidator((data: { clientId: string; limit?: number; offset?: number }) => data)
+  .inputValidator((data: { clientId: string | number; limit?: number; offset?: number }) => data)
   .handler(async ({ data }): Promise<PaginatedResponse<Project>> => {
     const params = new URLSearchParams()
     if (data.limit) params.set('limit', data.limit.toString())
@@ -85,7 +104,13 @@ export const getProjects = createServerFn({ method: 'GET' })
     const url = `${API_BASE_URL}/clients/${data.clientId}/projects${params.toString() ? `?${params}` : ''}`
     const response = await fetch(url, { headers: getHeaders() })
 
-    return handleResponse<PaginatedResponse<Project>>(response)
+    const items = await handleResponse<Project[]>(response)
+    return {
+      data: items,
+      total: items.length,
+      limit: data.limit ?? items.length,
+      offset: data.offset ?? 0,
+    }
   })
 
 // =============================================================================
@@ -93,7 +118,7 @@ export const getProjects = createServerFn({ method: 'GET' })
 // =============================================================================
 
 export const getTasks = createServerFn({ method: 'GET' })
-  .inputValidator((data: { projectId: string; limit?: number; offset?: number }) => data)
+  .inputValidator((data: { projectId: string | number; limit?: number; offset?: number }) => data)
   .handler(async ({ data }): Promise<PaginatedResponse<Task>> => {
     const params = new URLSearchParams()
     if (data.limit) params.set('limit', data.limit.toString())
@@ -102,7 +127,13 @@ export const getTasks = createServerFn({ method: 'GET' })
     const url = `${API_BASE_URL}/projects/${data.projectId}/tasks${params.toString() ? `?${params}` : ''}`
     const response = await fetch(url, { headers: getHeaders() })
 
-    return handleResponse<PaginatedResponse<Task>>(response)
+    const items = await handleResponse<Task[]>(response)
+    return {
+      data: items,
+      total: items.length,
+      limit: data.limit ?? items.length,
+      offset: data.offset ?? 0,
+    }
   })
 
 // =============================================================================
@@ -119,11 +150,17 @@ export const getTimeEntries = createServerFn({ method: 'GET' })
     const url = `${API_BASE_URL}/time-entries${params.toString() ? `?${params}` : ''}`
     const response = await fetch(url, { headers: getHeaders() })
 
-    return handleResponse<PaginatedResponse<TimeEntry>>(response)
+    const items = await handleResponse<TimeEntry[]>(response)
+    return {
+      data: items,
+      total: items.length,
+      limit: data.limit ?? items.length,
+      offset: data.offset ?? 0,
+    }
   })
 
 export const getTimeEntry = createServerFn({ method: 'GET' })
-  .inputValidator((data: { id: string }) => data)
+  .inputValidator((data: { id: string | number }) => data)
   .handler(async ({ data }): Promise<TimeEntry> => {
     const url = `${API_BASE_URL}/time-entries/${data.id}`
     const response = await fetch(url, { headers: getHeaders() })
@@ -145,7 +182,7 @@ export const createTimeEntry = createServerFn({ method: 'POST' })
   })
 
 export const updateTimeEntry = createServerFn({ method: 'POST' })
-  .inputValidator((data: { id: string } & UpdateTimeEntryRequest) => data)
+  .inputValidator((data: { id: string | number } & UpdateTimeEntryRequest) => data)
   .handler(async ({ data }): Promise<TimeEntry> => {
     const { id, ...body } = data
     const url = `${API_BASE_URL}/time-entries/${id}`

@@ -6,32 +6,41 @@
 // =============================================================================
 
 export interface Client {
-  id: string
+  id: number
   name: string
+  description: string
+  status: string
   createdAt: string // ISO 8601 timestamp
+  updatedAt: string // ISO 8601 timestamp
 }
 
 export interface Project {
-  id: string
+  id: number
+  clientId: number
   name: string
-  clientId: string
+  status: string
   createdAt: string // ISO 8601 timestamp
+  updatedAt: string // ISO 8601 timestamp
 }
 
 export interface Task {
-  id: string
+  id: number
+  parent: number // Parent task ID (0 = root level task)
   name: string
-  projectId: string
+  status: string
   createdAt: string // ISO 8601 timestamp
+  updatedAt: string // ISO 8601 timestamp
 }
 
 export interface TimeEntry {
-  id: string
-  taskId: string
+  id: number
+  taskId: number
+  userId: string // API key of the user
   comment: string
   start: string // ISO 8601 timestamp
   end: string // ISO 8601 timestamp
   createdAt: string // ISO 8601 timestamp
+  updatedAt: string // ISO 8601 timestamp
 }
 
 // =============================================================================
@@ -60,14 +69,14 @@ export interface PaginationParams {
 }
 
 export interface CreateTimeEntryRequest {
-  taskId: string
+  taskId: number
   comment: string
   start: string // ISO 8601 timestamp
   end: string // ISO 8601 timestamp
 }
 
 export interface UpdateTimeEntryRequest {
-  taskId: string
+  taskId: number
   comment: string
   start: string // ISO 8601 timestamp
   end: string // ISO 8601 timestamp
